@@ -1,0 +1,99 @@
+// .navbar {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   .menu-button {
+//     display: flex;
+//     flex-direction: column;
+//     cursor: pointer;
+//     padding: 50px 10px;
+//     position: relative;
+//     justify-content: center; 
+//     align-items: center; 
+//     background-color: $green;
+//     .bar {
+//       width: 100px;
+//       height: 7px;
+//       background-color: #333;
+//       margin: 14px 0;
+//     }
+//   }
+//   .menu {
+//     display: none;
+//     list-style: none;
+//   }
+// }
+
+// Styles pour les écrans mobiles (et tablettes)
+.navbar {
+  background-color: $green;
+  color: #fff;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  .menu-button {
+    display: block;
+    cursor: pointer;
+    .bar {
+      background-color: #fff;
+      height: 3px;
+      margin: 4px 0;
+      width: 10%; 
+    }
+  }
+
+  .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    flex-direction: column;
+    background-color: $green;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+
+    li {
+      padding: 10px;
+      text-align: center;
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+// Styles pour les écrans de taille supérieure (par exemple, desktop)
+@media (min-width: 768px) {
+  .navbar {
+    .menu-button {
+      display: none; // Masquer le bouton du menu pour les écrans plus grands
+    }
+
+    .menu {
+      display: flex;
+      position: static;
+      flex-direction: row;
+      background-color: transparent;
+      margin: 0;
+      width: auto;
+
+      li {
+        padding: 0 10px;
+
+        a {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+

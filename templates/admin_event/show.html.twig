@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Event{% endblock %}
+
+{% block body %}
+    <h1>Event</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ event.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ event.title }}</td>
+            </tr>
+            <tr>
+                <th>MaxContributor</th>
+                <td>{{ event.maxContributor }}</td>
+            </tr>
+            <tr>
+                <th>MinContributor</th>
+                <td>{{ event.minContributor }}</td>
+            </tr>
+            <tr>
+                <th>StartDate</th>
+                <td>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndDate</th>
+                <td>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>IsPrivate</th>
+                <td>{{ event.isPrivate ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsFinancialParticipation</th>
+                <td>{{ event.isFinancialParticipation ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>FinancialParticipationAmount</th>
+                <td>{{ event.financialParticipationAmount }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_event_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}">edit</a>
+
+    {{ include('admin_event/_delete_form.html.twig') }}
+{% endblock %}
