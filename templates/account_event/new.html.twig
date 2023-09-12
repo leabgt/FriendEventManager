@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Event{% endblock %}
+
+{% block body %}
+<div class="custom-container">
+
+    <h1>Create new Event</h1>
+
+    {{ include('account_event/_form.html.twig') }}
+</div>
+    {# <a href="{{ path('app_accoun_event_index') }}">back to list</a> #}
+{% endblock %}

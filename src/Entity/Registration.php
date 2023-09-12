@@ -24,6 +24,12 @@ class Registration
     #[ORM\JoinColumn(nullable: false)]
     private ?user $user = null;
 
+    #[ORM\Column]
+    private ?bool $isInvited = false;
+
+    #[ORM\Column]
+    private ?bool $hasConfirmed = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +67,30 @@ class Registration
     public function setUser(?user $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isIsInvited(): ?bool
+    {
+        return $this->isInvited;
+    }
+
+    public function setIsInvited(bool $isInvited): self
+    {
+        $this->isInvited = $isInvited;
+
+        return $this;
+    }
+
+    public function isHasConfirmed(): ?bool
+    {
+        return $this->hasConfirmed;
+    }
+
+    public function setHasConfirmed(bool $hasConfirmed): self
+    {
+        $this->hasConfirmed = $hasConfirmed;
 
         return $this;
     }

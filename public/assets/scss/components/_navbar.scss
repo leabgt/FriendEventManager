@@ -1,31 +1,4 @@
-// .navbar {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   .menu-button {
-//     display: flex;
-//     flex-direction: column;
-//     cursor: pointer;
-//     padding: 50px 10px;
-//     position: relative;
-//     justify-content: center; 
-//     align-items: center; 
-//     background-color: $green;
-//     .bar {
-//       width: 100px;
-//       height: 7px;
-//       background-color: #333;
-//       margin: 14px 0;
-//     }
-//   }
-//   .menu {
-//     display: none;
-//     list-style: none;
-//   }
-// }
-
-// Styles pour les écrans mobiles (et tablettes)
+/* Styles par défaut (mobile) */
 .navbar {
   background-color: $green;
   color: #fff;
@@ -35,6 +8,10 @@
   left: 0;
   width: 100%;
 
+  .custom-container {
+    margin-top: 0!important;
+  }
+
   .menu-button {
     display: block;
     cursor: pointer;
@@ -42,7 +19,7 @@
       background-color: #fff;
       height: 3px;
       margin: 4px 0;
-      width: 10%; 
+      width: 10%;
     }
   }
 
@@ -71,11 +48,11 @@
   }
 }
 
-// Styles pour les écrans de taille supérieure (par exemple, desktop)
+/* Styles pour les écrans de taille supérieure (tablette et desktop) */
 @media (min-width: 768px) {
   .navbar {
     .menu-button {
-      display: none; // Masquer le bouton du menu pour les écrans plus grands
+      display: none; /* Masquer le bouton du menu pour les écrans plus grands */
     }
 
     .menu {

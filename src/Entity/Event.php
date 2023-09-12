@@ -48,10 +48,6 @@ class Event
     #[ORM\JoinColumn(nullable: false)]
     private ?User $organisator = null;
 
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Place $place = null;
-
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Registration::class)]
     private Collection $registrations;
 
@@ -60,6 +56,9 @@ class Event
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Poll::class)]
     private Collection $polls;
+
+    #[ORM\Column(length: 255)]
+    private ?string $place = null;
 
     public function __construct()
     {
@@ -145,9 +144,9 @@ class Event
         return $this;
     }
 
-    public function isIsFinancialParticipation(): ?bool
+    public function isIsFinancialParticipation(): bool
     {
-        return $this->isFinancialParticipation;
+        return $this->isFinancialParticipation ?? false;
     }
 
     public function setIsFinancialParticipation(bool $isFinancialParticipation): static
@@ -189,18 +188,6 @@ class Event
     public function setOrganisator(?User $organisator): static
     {
         $this->organisator = $organisator;
-
-        return $this;
-    }
-
-    public function getPlace(): ?Place
-    {
-        return $this->place;
-    }
-
-    public function setPlace(?Place $place): static
-    {
-        $this->place = $place;
 
         return $this;
     }
@@ -291,6 +278,18 @@ class Event
                 $poll->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlace(): ?string
+    {
+        return $this->place;
+    }
+
+    public function setPlace(string $place): static
+    {
+        $this->place = $place;
 
         return $this;
     }

@@ -3,7 +3,11 @@
 {% block title %}Hello AccountEventController!{% endblock %}
 
 {% block body %}
-<div class="example-wrapper">
-
+<div class="custom-container">
+    {% for event in events %}
+        <h1>{{ event.title }}</h1>
+        <div>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</div>
+        <div>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</div>
+    {% endfor %}
 </div>
 {% endblock %}
