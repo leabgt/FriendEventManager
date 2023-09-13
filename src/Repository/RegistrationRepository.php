@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Registration;
+use App\Entity\User; 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,20 +40,23 @@ class RegistrationRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Registration[] Returns an array of Registration objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Registration[] Returns an array of Registration objects
+    */
+    public function findConfirmedEventsForUserNotOrganizedByUser(User $user): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('e')
+            ->from('App\Entity\Event', 'e')
+            ->join('e.registrations', 'r')
+            ->where('r.user = :user')
+            ->andWhere('r.hasConfirmed = true')
+            ->andWhere('e.organisator <> :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Registration
 //    {

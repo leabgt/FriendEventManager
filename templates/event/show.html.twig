@@ -12,5 +12,27 @@
         <a href="{{ path('app_event_invite', {'id': event.id}) }}">Inviter un utilisateur</a>
     {% endif %}
 
+    {% set canParticipate = false %}
+
+    {# Si l'événement n'est pas privé ou si l'utilisateur a été invité mais n'a pas confirmé sa participation. #}
+    {% if not event.isIsPrivate %}
+        {% set canParticipate = true %}
+    {% elseif existingRegistration and not existingRegistration.isHasConfirmed %}
+        {% set canParticipate = true %}
+    {% endif %}
+
+    {% if canParticipate %}
+        <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
+    {% endif %}
+
+    {% if fundraising %}
+        <h3>Montant total collecté : {{ fundraising.getTotalAmount }} €</h3>
+        {% if app.user and event.isIsFinancialParticipation() %}
+            <a href="{{ path('app_participation_contribute', { 'eventId': event.id }) }}" class="btn btn-primary">
+                Contribuer à l'événement ({{ event.getFinancialParticipationAmount() }}€)
+            </a>
+        {% endif %}
+    {% endif %}
+
 </div>
 {% endblock %}

@@ -19,12 +19,6 @@ class Event
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $maxContributor = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $minContributor = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $startDate = null;
 
@@ -80,30 +74,6 @@ class Event
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getMaxContributor(): ?int
-    {
-        return $this->maxContributor;
-    }
-
-    public function setMaxContributor(?int $maxContributor): static
-    {
-        $this->maxContributor = $maxContributor;
-
-        return $this;
-    }
-
-    public function getMinContributor(): ?int
-    {
-        return $this->minContributor;
-    }
-
-    public function setMinContributor(?int $minContributor): static
-    {
-        $this->minContributor = $minContributor;
 
         return $this;
     }

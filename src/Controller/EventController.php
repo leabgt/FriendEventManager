@@ -7,9 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Event;
 use App\Entity\Registration;
+use App\Entity\Notification;
+use App\Entity\Fundraising; 
 use App\Form\InviteType;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use App\Repository\FundraisingRepository; 
 use App\Form\EventType;
 use App\Repository\RegistrationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,15 +40,22 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/{id}', name: 'app_event_show')]
-    public function show(Event $event): Response
-    {
+    public function show(Event $event, FundraisingRepository $fundraisingRepository, RegistrationRepository $registrationRepository, Security $security): Response
+    {   
+        $user = $security->getUser(); 
+        
+        $fundraising = $fundraisingRepository->findOneBy(['event' => $event]);
+        $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
+            'fundraising' => $fundraising,  // Passez l'objet Fundraising entier
+            'existingRegistration' => $existingRegistration,
         ]);
     }
 
     #[Route('/evenement/{id}/invite', name: 'app_event_invite')]
-    public function invite(Request $request, Event $event, RegistrationRepository $registrationRepository): Response
+    public function invite(Request $request, Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser() !== $event->getOrganisator()) {
             throw new AccessDeniedException('Vous n\'êtes pas autorisé à inviter des utilisateurs à cet événement.');
@@ -76,20 +86,60 @@ class EventController extends AbstractController
                 $registration->setIsInvited(true);
                 $registration->setHasConfirmed(false);
 
-                $this->entityManager->persist($registration);
+                $entityManager->persist($registration);
+
+                // Créez une notification pour l'utilisateur
+                $notification = new Notification();
+                $notification->setUser($user);
+                $notification->setMessage('Vous avez été invité à l\'événement ' . $event->getTitle() . '.');
+
+                $entityManager->persist($notification);
             }
 
-            $this->entityManager->flush();
+            $entityManager->flush();
 
             $this->addFlash('success', 'Invitations envoyées avec succès!');
             return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
         }
 
-
         return $this->render('event/invite.html.twig', [
             'event' => $event,
             'inviteForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/evenement/{id}/participate', name: 'app_event_participate')]
+    public function participate(Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $em, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        // Vérifiez si l'utilisateur a déjà une registration pour cet événement.
+        $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
+
+        if ($existingRegistration) {
+            // Si l'utilisateur a déjà une registration mais n'a pas encore confirmé sa participation, confirmez-la.
+            if (!$existingRegistration->isHasConfirmed()) {
+                $existingRegistration->setHasConfirmed(true);
+                $em->flush();
+                $this->addFlash('success', 'Votre participation a été confirmée.');
+            } else {
+                $this->addFlash('warning', 'Vous êtes déjà inscrit à cet événement.');
+            }
+        } else {
+            // Si l'utilisateur n'a pas de registration, créez-en une nouvelle.
+            $registration = new Registration();
+            $registration->setEvent($event);
+            $registration->setUser($user);
+            $registration->setHasConfirmed(true);
+            $registration->setRegistrationDate(new \DateTime());
+
+            $em->persist($registration);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre participation a été enregistrée.');
+        }
+
+        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
     }
 
     #[Route('/mon-compte/evenements', name: 'app_account_myevents')]
@@ -111,9 +161,10 @@ class EventController extends AbstractController
     }
 
     #[Route('/mon-compte/evenements/new', name: 'app_account_event_new')]
-    public function new(Request $request, EventRepository $eventRepository, Security $security): Response
+    public function new(Request $request, EventRepository $eventRepository, EntityManagerInterface $entityManager, Security $security): Response
     {
         $event = new Event();
+        $fundraising = null;  // Initialize the fundraising to null
 
         // Récupérez l'utilisateur actuellement connecté
         $user = $security->getUser();
@@ -125,7 +176,26 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Enregistrez d'abord l'événement
             $eventRepository->save($event, true);
+
+            // Si IsParticipalFinancial est vrai, créez une cagnotte
+            if ($event->isIsFinancialParticipation()) {
+                $fundraising = new Fundraising();
+                $fundraising->setEvent($event);
+                $fundraising->setTotalAmount('0.00'); // Initialiser à 0 ou une valeur par défaut
+                $entityManager->persist($fundraising);
+            }
+
+            $registration = new Registration();
+            $registration->setEvent($event);
+            $registration->setUser($user);
+            $registration->setHasConfirmed(true); // Car l'organisateur est automatiquement confirmé
+            $registration->setRegistrationDate(new \DateTime());
+            $entityManager->persist($registration); 
+
+            // Flush the entity manager to save all changes
+            $entityManager->flush();
 
             // Obtenez l'ID de l'événement nouvellement créé
             $eventId = $event->getId();
@@ -136,7 +206,8 @@ class EventController extends AbstractController
 
         return $this->render('account_event/new.html.twig', [
             'event' => $event,
-            'form' => $form,
+            'form' => $form->createView(),
+            'fundraising' => $fundraising,
         ]);
     }
 }

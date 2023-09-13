@@ -1,11 +1,32 @@
 {% block body %}
 
 <nav class="navbar">
-    <div class="custom-container">
+    <div class="custom-container navbar-content">
         <div class="menu-button" id="menu-toggle">
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
+        </div>
+        <div class="notification-container">
+            {% if app.user %}
+                <div id="notification-icon">
+                    <i class="fa fa-bell"></i>
+                    {% if unreadNotifications|length > 0 %}
+                        <span class="notification-count">{{ unreadNotifications|length }}</span>
+                    {% endif %}
+                </div>
+                <div id="notification-popup" class="hidden">
+                    <ul>
+                        {% if allNotifications|length == 0 %}
+                            <li>Aucune notification</li>
+                        {% else %}
+                            {% for notification in allNotifications %}
+                                <li data-id="{{ notification.id }}">{{ notification.message }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
         <ul class="menu">
             <li><a href="{{ path('app_home') }}">Accueil</a></li>

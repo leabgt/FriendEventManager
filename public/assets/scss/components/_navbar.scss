@@ -8,7 +8,7 @@
   left: 0;
   width: 100%;
 
-  .custom-container {
+  .navbar-content {
     margin-top: 0!important;
   }
 
@@ -48,9 +48,56 @@
   }
 }
 
+.notification-container {
+  position: relative;
+}
+
+#notification-icon {
+  cursor: pointer;
+  position: relative;
+  i {
+    font-size: 24px;
+  }
+}
+
+.notification-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+#notification-popup {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  border: 1px solid #ccc;
+  background-color: white;
+  width: 200px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  li {
+    color: black; 
+    list-style: none;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
 /* Styles pour les écrans de taille supérieure (tablette et desktop) */
 @media (min-width: 768px) {
   .navbar {
+    .navbar-content {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+    }
     .menu-button {
       display: none; /* Masquer le bouton du menu pour les écrans plus grands */
     }
@@ -73,4 +120,6 @@
     }
   }
 }
+
+
 

@@ -20,8 +20,6 @@ class EventType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('place', TextType::class)
-            ->add('maxContributor', TextType::class)
-            ->add('minContributor', TextType::class)
             ->add('startDate', DateTimeType::class)
             ->add('endDate', DateTimeType::class)
             ->add('isPrivate', CheckboxType::class)
