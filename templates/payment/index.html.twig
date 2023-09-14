@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PaymentController!{% endblock %}
+
+{% block body %}
+<div class="custom-container">
+    <h1>Valider le Paiement</h1>
+    <form method="post" action="{{ path('process_payment') }}">
+        <button type="submit">Valider le Paiement</button>
+    </form>
+</div>
+{% endblock %}
