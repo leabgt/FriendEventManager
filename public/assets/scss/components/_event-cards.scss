@@ -1,0 +1,26 @@
+.event-cards {
+    display: grid;
+    grid-template-columns: repeat($mobile-columns, 1fr); // Mobile
+    gap: 10px; // Espacement entre les éléments
+  
+    a {
+      text-decoration: none;
+      color: $black;
+    }
+  
+    @media (min-width: 600px) {
+      grid-template-columns: repeat($tablet-columns, 1fr);
+    }
+  
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat($desktop-columns, 1fr);
+    }
+  
+    .event-card {
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Horizontal, Vertical, Flou, Couleur */
+      padding: 20px 30px;
+      border-radius: 3px;
+      background-color: $white;
+      margin: 10px 0;
+    }
+  }

@@ -25,8 +25,8 @@
         <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
     {% endif %}
 
-    {% if fundraising %}
-        <h3>Montant total collecté : {{ fundraising.getTotalAmount }} €</h3>
+    {% if event.isIsFinancialParticipation %}
+        <h3>Montant total collecté : {{ event.totalAmountCollected }} €</h3>
         {% if app.user and event.isIsFinancialParticipation() %}
             <a href="{{ path('app_participation_contribute', { 'eventId': event.id }) }}" class="btn btn-primary">
                 Contribuer à l'événement ({{ event.getFinancialParticipationAmount() }}€)

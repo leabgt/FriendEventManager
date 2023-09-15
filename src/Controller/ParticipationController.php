@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\RegistrationRepository;
 use App\Repository\EventRepository;
-use App\Repository\FundraisingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;  // Import TokenStorageInterface
 
@@ -22,7 +21,7 @@ class ParticipationController extends AbstractController
     }
 
     #[Route('/participation/{eventId}', name: 'app_participation_contribute')]
-    public function contributeToEvent(int $eventId, EventRepository $eventRepository, RegistrationRepository $registrationRepository, FundraisingRepository $fundraisingRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+    public function contributeToEvent(int $eventId, EventRepository $eventRepository, RegistrationRepository $registrationRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
         $user = $tokenStorage->getToken()->getUser();
 
@@ -39,21 +38,18 @@ class ParticipationController extends AbstractController
         }
 
         // Check if user already contributed
-        if ($registration->getFinancialContribution() > 0) {
+        if ($registration->isHasParticipated() == true) {
             $this->addFlash('error', 'Vous avez déjà contribué à cette cagnotte.');
             return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
         }
 
         $amount = $event->getFinancialParticipationAmount();
-        $registration->setFinancialContribution($amount);
+        $registration->setHasParticipated(true);
 
-        $fundraising = $fundraisingRepository->findOneBy(['event' => $event]);
-        if ($fundraising) {
-            $currentAmount = $fundraising->getTotalAmount();
-            $newAmount = $currentAmount + $amount;
-            $fundraising->setTotalAmount($newAmount);
-            $entityManager->persist($fundraising);
-        }
+        $currentAmount = $event->getTotalAmountCollected();
+        $newAmount = $currentAmount + $amount;
+        $event->setTotalAmountCollected($newAmount);
+        $entityManager->persist($event);
 
         $entityManager->persist($registration);
         $entityManager->flush();
@@ -62,8 +58,3 @@ class ParticipationController extends AbstractController
         return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
     }
 }
-
-
-
-
-

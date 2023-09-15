@@ -30,8 +30,8 @@ class Registration
     #[ORM\Column]
     private ?bool $hasConfirmed = false;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
-    private ?string $financialContribution = null;
+    #[ORM\Column]
+    private ?bool $hasParticipated = false;
 
     public function getId(): ?int
     {
@@ -98,14 +98,14 @@ class Registration
         return $this;
     }
 
-    public function getFinancialContribution(): ?string
+    public function isHasParticipated(): ?bool
     {
-        return $this->financialContribution;
+        return $this->hasParticipated;
     }
 
-    public function setFinancialContribution(?string $financialContribution): static
+    public function setHasParticipated(bool $hasParticipated): static
     {
-        $this->financialContribution = $financialContribution;
+        $this->hasParticipated = $hasParticipated;
 
         return $this;
     }

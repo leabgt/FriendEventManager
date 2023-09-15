@@ -10,8 +10,6 @@
             <tr>
                 <th>Id</th>
                 <th>Title</th>
-                <th>MaxContributor</th>
-                <th>MinContributor</th>
                 <th>StartDate</th>
                 <th>EndDate</th>
                 <th>IsPrivate</th>
@@ -25,8 +23,6 @@
             <tr>
                 <td>{{ event.id }}</td>
                 <td>{{ event.title }}</td>
-                <td>{{ event.maxContributor }}</td>
-                <td>{{ event.minContributor }}</td>
                 <td>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.isPrivate ? 'Yes' : 'No' }}</td>
@@ -45,5 +41,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_event_new') }}">Create new</a>
 {% endblock %}

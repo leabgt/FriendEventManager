@@ -3,13 +3,13 @@
 namespace App\Command;
 
 use App\Entity\Event;
-use App\Entity\User;
 use App\Entity\Category;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Faker\Factory;
 
 class GenerateEventsCommand extends Command
 {
@@ -33,30 +33,34 @@ class GenerateEventsCommand extends Command
     {
         $faker = Factory::create();
 
-        // Assurez-vous d'avoir au moins un utilisateur et une catégorie dans votre BD
-        // Sinon, cette partie du code échouera
-        $organisator = $this->entityManager->getRepository(User::class)->findOneBy([]);
-        $category = $this->entityManager->getRepository(Category::class)->findOneBy([]);
-
-        if (!$organisator || !$category) {
-            $output->writeln("Please ensure you have at least one User and one Category in your database.");
-            return Command::FAILURE;
-        }
-
         for ($i = 0; $i < 50; $i++) {
             $event = new Event();
 
             $event->setTitle($faker->sentence)
-                ->setMaxContributor($faker->numberBetween(1, 100))
-                ->setMinContributor($faker->numberBetween(1, 50))
                 ->setStartDate($faker->dateTimeBetween('-1 years', 'now'))
                 ->setEndDate($faker->dateTimeBetween('now', '+1 years'))
                 ->setIsPrivate($faker->boolean)
                 ->setIsFinancialParticipation($faker->boolean)
                 ->setFinancialParticipationAmount($faker->randomFloat(2, 5, 200))
-                ->setCategory($category)
-                ->setOrganisator($organisator)
                 ->setPlace($faker->address);
+
+            // Assurez-vous d'avoir au moins une catégorie dans votre BD
+            $category = $this->entityManager->getRepository(Category::class)->findOneBy([]);
+            if ($category) {
+                $event->setCategory($category);
+            } else {
+                // Si aucune catégorie n'est trouvée, vous pouvez créer une nouvelle catégorie ici.
+                $category = new Category();
+                $category->setName($faker->word);
+                $this->entityManager->persist($category);
+                $event->setCategory($category);
+            }
+
+            // Assurez-vous d'avoir au moins un organisateur dans votre BD
+            $organisator = $this->entityManager->getRepository(User::class)->findOneBy([]);
+            if ($organisator) {
+                $event->setOrganisator($organisator);
+            }
 
             $this->entityManager->persist($event);
         }

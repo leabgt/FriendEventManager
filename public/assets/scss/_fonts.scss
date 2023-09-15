@@ -1,10 +1,30 @@
 @font-face {
-    font-family: 'Poppins';
-    src: url('../../fonts/Poppins-Regular.ttf') format('ttf'),
-    // font-weight: normal;
-    // font-style: normal;
+    font-family: 'Commissioner';
+    src: url('../../fonts/Commissioner-Regular.ttf') format('truetype'),
+}
+
+@font-face {
+    font-family: 'Commissioner-black';
+    src: url('../../fonts/Commissioner-Black.ttf') format('truetype'),
+}
+
+@font-face {
+    font-family: 'Commissioner-medium';
+    src: url('../../fonts/Commissioner-Medium.ttf') format('truetype'),
 }
 
 body {
-    font-family: 'poppins' ;
+    font-family: 'Commissioner' ;
+}
+
+h2 {
+    font-size: 32px;
+    color: $purple; 
+    font-family: 'Commissioner-black';
+}
+
+h3 {
+    font-family: 'Commissioner-medium';
+    margin: 10px 0 20px 0;
+    font-size: 24px;
 }

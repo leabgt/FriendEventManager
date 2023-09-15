@@ -10,10 +10,12 @@
 
   .navbar-content {
     margin-top: 0!important;
+    display: flex;
   }
 
   .menu-button {
     display: block;
+    width: 100%;
     cursor: pointer;
     .bar {
       background-color: #fff;
@@ -34,11 +36,12 @@
     top: 50px;
     left: 0;
     width: 100%;
+    padding-top: 40px;
 
     li {
       padding: 10px;
       text-align: center;
-
+      font-size: 20px; 
       a {
         color: #fff;
         text-decoration: none;
@@ -50,6 +53,8 @@
 
 .notification-container {
   position: relative;
+  width: 10%;
+  text-align: right;
 }
 
 #notification-icon {
@@ -57,6 +62,7 @@
   position: relative;
   i {
     font-size: 24px;
+    margin-right: 20px;
   }
 }
 
@@ -109,6 +115,7 @@
       background-color: transparent;
       margin: 0;
       width: auto;
+      padding-top: 0;
 
       li {
         padding: 0 10px;

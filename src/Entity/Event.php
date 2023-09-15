@@ -45,20 +45,19 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Registration::class)]
     private Collection $registrations;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Comments::class)]
-    private Collection $comments;
-
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Poll::class)]
-    private Collection $polls;
-
     #[ORM\Column(length: 255)]
     private ?string $place = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $totalAmountCollected = null;
+
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Payment::class)]
+    private Collection $payments;
 
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
-        $this->comments = new ArrayCollection();
-        $this->polls = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,66 +191,6 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection<int, Comments>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comments $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comments $comment): static
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getEvent() === $this) {
-                $comment->setEvent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Poll>
-     */
-    public function getPolls(): Collection
-    {
-        return $this->polls;
-    }
-
-    public function addPoll(Poll $poll): static
-    {
-        if (!$this->polls->contains($poll)) {
-            $this->polls->add($poll);
-            $poll->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removePoll(Poll $poll): static
-    {
-        if ($this->polls->removeElement($poll)) {
-            // set the owning side to null (unless already changed)
-            if ($poll->getEvent() === $this) {
-                $poll->setEvent(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getPlace(): ?string
     {
         return $this->place;
@@ -260,6 +199,48 @@ class Event
     public function setPlace(string $place): static
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getTotalAmountCollected(): ?string
+    {
+        return $this->totalAmountCollected;
+    }
+
+    public function setTotalAmountCollected(?string $totalAmountCollected): static
+    {
+        $this->totalAmountCollected = $totalAmountCollected;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getEvent() === $this) {
+                $payment->setEvent(null);
+            }
+        }
 
         return $this;
     }

@@ -6,24 +6,44 @@
 
 <div class="custom-container">
     {% if userevents is not empty %}
-    <h2>Mes événements</h2>
-        {% for userevent in userevents %}
-            <h3>{{ userevent.title }}</h3>
-            <div>{{ userevent.startDate ? userevent.startDate|date('Y-m-d H:i:s') : '' }}</div>
-            <div>{{ userevent.endDate ? userevent.endDate|date('Y-m-d H:i:s') : '' }}</div>
-            <a href="{{ path('app_event_show', {'id': userevent.id}) }}">Voir les détails de l'événement</a>
-        {% endfor %}
-    {% endif %}
-
-    <h2> Participer à de nouveaux événements </h2>
-    {% for event in events %}
-        {% if not event.isPrivate %}
-            <h3>{{ event.title }}</h3>
-            <div>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</div>
-            <div>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</div>
-            <a href="{{ path('app_event_show', {'id': event.id}) }}">Voir les détails de l'événement</a>
+    <div class="myevents">
+        <h2>MES EVENEMENTS</h2>
+            <div class="event-cards">
+                {% for userevent in userevents %}
+                <a href="{{ path('app_event_show', {'id': userevent.id}) }}">
+                    <div class="event-card">
+                        <h3>{{ userevent.title }}</h3>
+                        <div> {{userevent.category.name}}</div>
+                        <div> Organisé par {{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</div>
+                        <div> {{userevent.place}}</div>
+                        <div> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} </div>
+                        <div> au {{ userevent.endDate|date(format = 'j F Y H:i') }} </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
         {% endif %}
-    {% endfor %}
+    </div>
+
+    <div class="events">
+        <h2> Participer à de nouveaux événements </h2>
+        <div class="event-cards">
+        {% for event in events %}
+            {% if not event.isPrivate %}
+                <a href="{{ path('app_event_show', {'id': event.id}) }}">
+                        <div class="event-card">
+                            <h3>{{ event.title }}</h3>
+                            <div> {{event.category.name}}</div>
+                            <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
+                            <div> {{event.place}}</div>
+                            <div> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </div>
+                            <div> au {{ event.endDate|date('j F Y H:i') }} </div>
+                        </div>
+                    </a>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
 </div>
 
 {% endblock %}

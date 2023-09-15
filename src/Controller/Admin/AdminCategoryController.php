@@ -34,7 +34,7 @@ class AdminCategoryController extends AbstractController
             return $this->redirectToRoute('app_admin_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('admin_category/new.html.twig', [
+        return $this->render('admin_category/new.html.twig', [
             'category' => $category,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class AdminCategoryController extends AbstractController
             return $this->redirectToRoute('app_admin_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('admin_category/edit.html.twig', [
+        return $this->render('admin_category/edit.html.twig', [
             'category' => $category,
             'form' => $form,
         ]);

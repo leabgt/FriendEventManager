@@ -8,11 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Event;
 use App\Entity\Registration;
 use App\Entity\Notification;
-use App\Entity\Fundraising; 
 use App\Form\InviteType;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
-use App\Repository\FundraisingRepository; 
 use App\Form\EventType;
 use App\Repository\RegistrationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,16 +38,16 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/{id}', name: 'app_event_show')]
-    public function show(Event $event, FundraisingRepository $fundraisingRepository, RegistrationRepository $registrationRepository, Security $security): Response
-    {   
-        $user = $security->getUser(); 
-        
-        $fundraising = $fundraisingRepository->findOneBy(['event' => $event]);
+    public function show(Event $event, RegistrationRepository $registrationRepository, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        // $fundraising = $fundraisingRepository->findOneBy(['event' => $event]);
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
 
         return $this->render('event/show.html.twig', [
             'event' => $event,
-            'fundraising' => $fundraising,  // Passez l'objet Fundraising entier
+            // 'fundraising' => $fundraising,  // Passez l'objet Fundraising entier
             'existingRegistration' => $existingRegistration,
         ]);
     }
@@ -85,6 +83,7 @@ class EventController extends AbstractController
                 $registration->setRegistrationDate(new \DateTime('now'));
                 $registration->setIsInvited(true);
                 $registration->setHasConfirmed(false);
+                $registration->setHasParticipated(false);
 
                 $entityManager->persist($registration);
 
@@ -164,7 +163,6 @@ class EventController extends AbstractController
     public function new(Request $request, EventRepository $eventRepository, EntityManagerInterface $entityManager, Security $security): Response
     {
         $event = new Event();
-        $fundraising = null;  // Initialize the fundraising to null
 
         // Récupérez l'utilisateur actuellement connecté
         $user = $security->getUser();
@@ -181,10 +179,7 @@ class EventController extends AbstractController
 
             // Si IsParticipalFinancial est vrai, créez une cagnotte
             if ($event->isIsFinancialParticipation()) {
-                $fundraising = new Fundraising();
-                $fundraising->setEvent($event);
-                $fundraising->setTotalAmount('0.00'); // Initialiser à 0 ou une valeur par défaut
-                $entityManager->persist($fundraising);
+                $event->setTotalAmountCollected(0.00);
             }
 
             $registration = new Registration();
@@ -192,7 +187,7 @@ class EventController extends AbstractController
             $registration->setUser($user);
             $registration->setHasConfirmed(true); // Car l'organisateur est automatiquement confirmé
             $registration->setRegistrationDate(new \DateTime());
-            $entityManager->persist($registration); 
+            $entityManager->persist($registration);
 
             // Flush the entity manager to save all changes
             $entityManager->flush();
@@ -207,7 +202,6 @@ class EventController extends AbstractController
         return $this->render('account_event/new.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
-            'fundraising' => $fundraising,
         ]);
     }
 }

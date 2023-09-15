@@ -33,6 +33,9 @@ class Payment
     #[ORM\JoinColumn(nullable: false)]
     private ?user $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'payments')]
+    private ?event $event = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,18 @@ class Payment
     public function setUser(?user $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEvent(): ?event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?event $event): static
+    {
+        $this->event = $event;
 
         return $this;
     }
