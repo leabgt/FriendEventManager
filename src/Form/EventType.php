@@ -18,22 +18,35 @@ class EventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('place', TextType::class)
-            ->add('startDate', DateTimeType::class)
-            ->add('endDate', DateTimeType::class)
-            ->add('isPrivate', CheckboxType::class)
+            ->add('title', TextType::class, [
+                'row_attr' => ['class' => 'event-form-row'],
+            ])
+            ->add('place', TextType::class, [
+                'row_attr' => ['class' => 'event-form-row'],
+            ])
+            ->add('startDate', DateTimeType::class, [
+                'row_attr' => ['class' => 'event-form-row'],
+            ])
+            ->add('endDate', DateTimeType::class, [
+                'row_attr' => ['class' => 'event-form-row'],
+            ])
+            ->add('isPrivate', CheckboxType::class, [
+                'row_attr' => ['class' => 'event-form-row'],
+            ])
             ->add('isFinancialParticipation', CheckboxType::class, [
                 'required' => false,
+                'row_attr' => ['class' => 'event-form-row'],
                 'attr' => ['id' => 'event_isFinancialParticipation'], // Ajoutez l'ID
             ])
             ->add('financialParticipationAmount', TextType::class, [
                 'label' => false,
                 'required' => false,
+                'row_attr' => ['class' => 'event-form-row'],
                 'attr' => ['id' => 'event_financialParticipationAmount'], // Ajoutez l'ID
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
+                'row_attr' => ['class' => 'event-form-row'],
                 'choice_label' => 'name',
                 'placeholder' => 'Select a category', // Texte par défaut pour le champ (optionnel)
                 'multiple' => false, // Liste déroulante (par défaut)

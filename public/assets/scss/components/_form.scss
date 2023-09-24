@@ -1,0 +1,45 @@
+/// FORM ///
+label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size:24px; 
+}
+input{
+    height: 30px;
+    border: none;
+    border-radius: 3px;
+    background-color: $white;
+}
+
+/// LOGIN FORM ///
+.login-form{
+    display: flex;
+    flex-direction: column;
+    width:80%; 
+    margin:auto; 
+    margin-top: 64px;
+}
+
+@media (min-width:768px) {
+    .login-form{
+        width:25%; 
+    }
+}
+
+/// REGISTER FORM ///
+.register-form{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 64px;
+    .register-form-row{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (min-width:768px) {
+    .register-form{
+        width:50%; 
+    }
+}
