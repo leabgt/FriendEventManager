@@ -43,3 +43,21 @@ input{
         width:50%; 
     }
 }
+
+/// REGISTER FORM ///
+.event-form{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 24px;
+    .event-form-row{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (min-width:768px) {
+    .event-form{
+        width:50%; 
+    }
+}
