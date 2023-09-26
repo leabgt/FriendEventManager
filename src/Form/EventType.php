@@ -8,7 +8,7 @@ use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,43 +20,35 @@ class EventType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'row_attr' => ['class' => 'event-form-row'],
                 'label' => 'Nom de l\'événement',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'row_attr' => ['class' => 'event-form-row'],
                 'choice_label' => 'name',
                 'placeholder' => 'Select a category', // Texte par défaut pour le champ (optionnel)
                 'multiple' => false, // Liste déroulante (par défaut)
                 'label' => 'Catégorie',
             ])
             ->add('place', TextType::class, [
-                'row_attr' => ['class' => 'event-form-row'],
                 'label' => 'Lieu / Adresse',
             ])
-            ->add('startDate', DateTimeType::class, [
-                'row_attr' => ['class' => 'event-form-row'],
+            ->add('startDate', TextType::class, [
+                'attr' => ['class' => 'datetimepicker'],
                 'label' => 'Début',
             ])
-            ->add('endDate', DateTimeType::class, [
-                'row_attr' => ['class' => 'event-form-row'],
+            ->add('endDate', TextType::class, [
+                'attr' => ['class' => 'datetimepicker'],
                 'label' => 'Fin',
             ])
-            ->add('isPrivate', CheckboxType::class, [
-                'row_attr' => ['class' => 'event-form-row'],
-                'label' => 'Cet événement est-il privé ?',
+            ->add('isPrivate', HiddenType::class, [
+                'data' => '0',  // valeur par défaut, peut être '0' ou '1'
             ])
-            ->add('isFinancialParticipation', CheckboxType::class, [
-                'required' => false,
-                'row_attr' => ['class' => 'event-form-row'],
-                'attr' => ['id' => 'event_isFinancialParticipation'], // Ajoutez l'ID
-                'label' => 'Y-a-t-il une participation financière ?',
+            ->add('isFinancialParticipation', HiddenType::class, [
+                'data' => '0',
             ])
             ->add('financialParticipationAmount', TextType::class, [
                 'label' => false,
                 'required' => false,
-                'row_attr' => ['class' => 'event-form-row'],
                 'attr' => ['id' => 'event_financialParticipationAmount'], // Ajoutez l'ID
                 'label' => 'Montant de la participation',
             ])

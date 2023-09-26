@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,9 +30,10 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Nom', // This is the label
                 'row_attr' => ['class' => 'register-form-row'],
             ])
-            ->add('birthDate', null, [
+            ->add('birthDate', TextType::class, [
                 'label' => 'Date de naissance', // This is the label
                 'row_attr' => ['class' => 'register-form-row'],
+                'attr' => ['class' => 'datepicker'],
             ])
             // ->add('agreeTerms', CheckboxType::class, [
             //     'mapped' => false,

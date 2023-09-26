@@ -4,11 +4,15 @@ label {
     margin-bottom: 5px;
     font-size:24px; 
 }
-input{
+input, select{
     height: 30px;
     border: none;
     border-radius: 3px;
     background-color: $white;
+}
+select{
+    font-size: 24px; 
+    padding: 2px;
 }
 
 /// LOGIN FORM ///
@@ -44,7 +48,7 @@ input{
     }
 }
 
-/// REGISTER FORM ///
+/// EVENT FORM ///
 .event-form{
     display: flex;
     flex-direction: column;
@@ -53,6 +57,15 @@ input{
     .event-form-row{
         display: flex;
         flex-direction: column;
+        #category-button-group{
+            display: flex;
+            flex-wrap: wrap; 
+            // justify-content: space-between; 
+            .category-toggle-button{
+                flex: 0 0 calc(100% / 5);
+                box-sizing: border-box;
+            }
+        }
     }
 }
 
