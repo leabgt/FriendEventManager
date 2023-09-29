@@ -82,7 +82,7 @@ class Event
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): static
+    public function setStartDate(\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -94,7 +94,7 @@ class Event
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): static
+    public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
 

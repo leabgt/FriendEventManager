@@ -1,29 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Facilitez l'organisation de vos événements entre amis{% endblock %}
 
 {% block body %}
 
 <div class="custom-container">
+
+    <h1>Facilitez l'organisation de vos événements entre amis</h1>
+    
     {% if userevents is not empty %}
     <div class="myevents">
         <h2>MES EVENEMENTS</h2>
-            <div class="event-cards">
-                {% for userevent in userevents %}
+        <div class="event-cards">
+            {% for userevent in userevents %}
+            <div class="event-card">
                 <a href="{{ path('app_event_show', {'id': userevent.id}) }}">
-                    <div class="event-card">
-                        <h3>{{ userevent.title }}</h3>
-                        <div> {{userevent.category.name}}</div>
-                        <div> Organisé par {{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</div>
-                        <div> {{userevent.place}}</div>
-                        <div> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} </div>
-                        <div> au {{ userevent.endDate|date(format = 'j F Y H:i') }} </div>
-                    </div>
+                    <h3>{{ userevent.title }}</h3>
+                    <div> {{userevent.category.name}}</div>
+                    <div> Organisé par {{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</div>
+                    <div> {{userevent.place}}</div>
+                    <time> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} </time>
+                    <time> au {{ userevent.endDate|date(format = 'j F Y H:i') }} </time>
                 </a>
-                {% endfor %}
+                <div class="event-management">
+                    <a href="{{ path('app_myevent_delete', {'id': userevent.id}) }}" title="Supprimer">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    <a href="{{ path('app_myevent_edit', {'id': userevent.id}) }}" title="Modifier">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                </div>
             </div>
-        {% endif %}
+            {% endfor %}
+        </div>
     </div>
+    {% endif %}
 
     <div class="events">
         <h2> Participer à de nouveaux événements </h2>
@@ -36,8 +47,8 @@
                             <div> {{event.category.name}}</div>
                             <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
                             <div> {{event.place}}</div>
-                            <div> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </div>
-                            <div> au {{ event.endDate|date('j F Y H:i') }} </div>
+                            <time> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </time>
+                            <time> au {{ event.endDate|date('j F Y H:i') }} </time>
                         </div>
                     </a>
             {% endif %}

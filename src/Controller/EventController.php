@@ -159,48 +159,163 @@ class EventController extends AbstractController
         ]);
     }
 
+    // #[Route('/mon-compte/evenements/new', name: 'app_account_event_new')]
+    // public function new(Request $request, EventRepository $eventRepository, EntityManagerInterface $entityManager, Security $security): Response
+    // {
+    //     $event = new Event();
+
+    //     // Récupérez l'utilisateur actuellement connecté
+    //     $user = $security->getUser();
+
+    //     // Remplissez automatiquement l'ID de l'organisateur avec l'ID de l'utilisateur
+    //     $event->setOrganisator($user);
+
+    //     $form = $this->createForm(EventType::class, $event);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         // Enregistrez d'abord l'événement
+    //         $eventRepository->save($event, true);
+
+    //         // Si IsParticipalFinancial est vrai, créez une cagnotte
+    //         if ($event->isIsFinancialParticipation()) {
+    //             $event->setTotalAmountCollected(0.00);
+    //         }
+
+    //         $registration = new Registration();
+    //         $registration->setEvent($event);
+    //         $registration->setUser($user);
+    //         $registration->setHasConfirmed(true); // Car l'organisateur est automatiquement confirmé
+    //         $registration->setRegistrationDate(new \DateTime());
+    //         $entityManager->persist($registration);
+
+    //         // Flush the entity manager to save all changes
+    //         $entityManager->flush();
+
+    //         // Obtenez l'ID de l'événement nouvellement créé
+    //         $eventId = $event->getId();
+
+    //         // Redirigez l'utilisateur vers la route app_event_show avec l'ID en tant que paramètre
+    //         return $this->redirectToRoute('app_event_show', ['id' => $eventId]);
+    //     }
+
+    //     return $this->render('account_event/new.html.twig', [
+    //         'event' => $event,
+    //         'form' => $form->createView(),
+    //     ]);
+    // }
     #[Route('/mon-compte/evenements/new', name: 'app_account_event_new')]
-    public function new(Request $request, EventRepository $eventRepository, EntityManagerInterface $entityManager, Security $security): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $event = new Event();
-
-        // Récupérez l'utilisateur actuellement connecté
         $user = $security->getUser();
-
-        // Remplissez automatiquement l'ID de l'organisateur avec l'ID de l'utilisateur
         $event->setOrganisator($user);
 
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Enregistrez d'abord l'événement
-            $eventRepository->save($event, true);
 
-            // Si IsParticipalFinancial est vrai, créez une cagnotte
+            // Convert the startDate string to DateTime object
+            $startDateString = $form->get('startDate')->getData();
+            $startDate = \DateTime::createFromFormat('Y-m-d H:i', $startDateString);
+            $event->setStartDate($startDate);
+
+            $endDateString = $form->get('endDate')->getData();
+            $endDate = \DateTime::createFromFormat('Y-m-d H:i', $endDateString);
+            $event->setEndDate($endDate);
+
             if ($event->isIsFinancialParticipation()) {
                 $event->setTotalAmountCollected(0.00);
             }
 
+            $entityManager->persist($event);
+
             $registration = new Registration();
             $registration->setEvent($event);
             $registration->setUser($user);
-            $registration->setHasConfirmed(true); // Car l'organisateur est automatiquement confirmé
+            $registration->setHasConfirmed(true);
             $registration->setRegistrationDate(new \DateTime());
             $entityManager->persist($registration);
 
-            // Flush the entity manager to save all changes
             $entityManager->flush();
 
-            // Obtenez l'ID de l'événement nouvellement créé
-            $eventId = $event->getId();
-
-            // Redirigez l'utilisateur vers la route app_event_show avec l'ID en tant que paramètre
-            return $this->redirectToRoute('app_event_show', ['id' => $eventId]);
+            return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
         }
 
         return $this->render('account_event/new.html.twig', [
             'event' => $event,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/mon-compte/evenements/{id}/supprimer', name: 'app_myevent_delete')]
+    public function deleteEvent(int $id, Security $security, EntityManagerInterface $em): Response
+    {
+        $user = $security->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $event = $em->getRepository(Event::class)->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('L\'événement demandé n\'existe pas.');
+        }
+
+        if ($event->getOrganisator() !== $user) {
+            $this->addFlash('error', 'Seul l\'organisateur de l\'événement peut le supprimer.');
+            return $this->redirectToRoute('app_account_myevents');
+        }
+
+        // Suppression des inscriptions associées à l'événement
+        $registrations = $em->getRepository(Registration::class)->findBy(['event' => $event]);
+        foreach ($registrations as $registration) {
+            $em->remove($registration);
+        }
+
+        // Suppression de l'événement
+        $em->remove($event);
+        $em->flush();
+
+        $this->addFlash('success', 'Événement supprimé avec succès.');
+
+        return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/mon-compte/evenements/{id}/editer', name: 'app_myevent_edit', methods: ['GET', 'POST'])]
+    public function editEvent(int $id, Security $security, EntityManagerInterface $em, Request $request): Response
+    {
+        $user = $security->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $event = $em->getRepository(Event::class)->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('L\'événement demandé n\'existe pas.');
+        }
+
+        if ($event->getOrganisator() !== $user) {
+            $this->addFlash('error', 'Seul l\'organisateur de l\'événement peut le modifier.');
+            return $this->redirectToRoute('app_account_myevents');
+        }
+
+        // Supposons que vous ayez un EventFormType pour traiter le formulaire
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Événement modifié avec succès.');
+            return $this->redirectToRoute('app_account_myevents');
+        }
+
+        return $this->render('account_event/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

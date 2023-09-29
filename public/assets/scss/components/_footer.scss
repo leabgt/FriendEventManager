@@ -1,0 +1,15 @@
+.footer {
+    background-color: $green;
+    color: $white;
+    width: 100%;
+    position: absolute;
+    left: 0;
+
+    .footer-content {
+        margin-top: 0!important;
+        p {
+            text-align: center;
+        }
+    }
+
+}

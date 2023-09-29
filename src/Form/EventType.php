@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,10 +37,12 @@ class EventType extends AbstractType
             ->add('startDate', TextType::class, [
                 'attr' => ['class' => 'datetimepicker'],
                 'label' => 'Début',
+                'mapped' => false,
             ])
             ->add('endDate', TextType::class, [
                 'attr' => ['class' => 'datetimepicker'],
                 'label' => 'Fin',
+                'mapped' => false,
             ])
             ->add('isPrivate', HiddenType::class, [
                 'data' => '0',  // valeur par défaut, peut être '0' ou '1'
