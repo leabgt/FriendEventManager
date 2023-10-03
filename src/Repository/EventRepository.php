@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,33 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Event[] Returns an array of Event objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Event[] Returns an array of Event objects
+     */
+    public function findEventsByUser(User $user)
+    {
+        return $this->createQueryBuilder('e') // 'e' is an alias for 'Event'
+            ->join('e.registrations', 'r') // 'r' is an alias for 'Registration'
+            ->where('r.user = :user')
+            ->andWhere('r.hasConfirmed = :hasConfirmed')
+            ->setParameters([
+                'user' => $user,
+                'hasConfirmed' => true,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Event
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findEventsWithoutUnconfirmedRegistration(User $user)
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.registrations', 'r', 'WITH', 'r.user = :user')
+            ->where('r.user IS NULL OR r.hasConfirmed = :hasConfirmed')
+            ->setParameters([
+                'user' => $user,
+                'hasConfirmed' => false,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 }

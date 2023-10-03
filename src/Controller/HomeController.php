@@ -12,33 +12,26 @@ use App\Service\DateFormatterService;
 
 class HomeController extends AbstractController
 {
-    // private $dateFormatterService;
-
-    // public function __construct(DateFormatterService $dateFormatterService)
-    // {
-    //     $this->dateFormatterService = $dateFormatterService;
-    // }
-
     #[Route('/', name: 'app_home')]
-    public function index(EventRepository $eventRepository, Security $security, UserRepository $userRepository, DateFormatterService $dateFormatter): Response
+    public function index(EventRepository $eventRepository, Security $security, DateFormatterService $dateFormatter): Response
     {
         setlocale(LC_TIME, 'fr_FR.UTF-8');
 
-        $events = $eventRepository->findAll();
-
         $user = $security->getUser();
-        $userevents = null;
+        $events = $userevents = null;
 
         if ($user) {
-            $userRepo = $userRepository->find($this->getUser());
-            $userevents = $userRepo->getEvents();
+            $userevents = $eventRepository->findEventsByUser($user);
+            $events = $eventRepository->findEventsWithoutUnconfirmedRegistration($user);
+        } else {
+            $events = $eventRepository->findAll();
         }
 
         return $this->render('home/index.html.twig', [
             'events' => $events,
             'user' => $user,
             'userevents' => $userevents,
-            'dateFormatter' => $dateFormatter, // Passer le service de formatage à la vue
+            'dateFormatter' => $dateFormatter,
         ]);
     }
 }

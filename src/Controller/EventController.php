@@ -159,51 +159,6 @@ class EventController extends AbstractController
         ]);
     }
 
-    // #[Route('/mon-compte/evenements/new', name: 'app_account_event_new')]
-    // public function new(Request $request, EventRepository $eventRepository, EntityManagerInterface $entityManager, Security $security): Response
-    // {
-    //     $event = new Event();
-
-    //     // Récupérez l'utilisateur actuellement connecté
-    //     $user = $security->getUser();
-
-    //     // Remplissez automatiquement l'ID de l'organisateur avec l'ID de l'utilisateur
-    //     $event->setOrganisator($user);
-
-    //     $form = $this->createForm(EventType::class, $event);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         // Enregistrez d'abord l'événement
-    //         $eventRepository->save($event, true);
-
-    //         // Si IsParticipalFinancial est vrai, créez une cagnotte
-    //         if ($event->isIsFinancialParticipation()) {
-    //             $event->setTotalAmountCollected(0.00);
-    //         }
-
-    //         $registration = new Registration();
-    //         $registration->setEvent($event);
-    //         $registration->setUser($user);
-    //         $registration->setHasConfirmed(true); // Car l'organisateur est automatiquement confirmé
-    //         $registration->setRegistrationDate(new \DateTime());
-    //         $entityManager->persist($registration);
-
-    //         // Flush the entity manager to save all changes
-    //         $entityManager->flush();
-
-    //         // Obtenez l'ID de l'événement nouvellement créé
-    //         $eventId = $event->getId();
-
-    //         // Redirigez l'utilisateur vers la route app_event_show avec l'ID en tant que paramètre
-    //         return $this->redirectToRoute('app_event_show', ['id' => $eventId]);
-    //     }
-
-    //     return $this->render('account_event/new.html.twig', [
-    //         'event' => $event,
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
     #[Route('/mon-compte/evenements/new', name: 'app_account_event_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {

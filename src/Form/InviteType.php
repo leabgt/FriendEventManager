@@ -15,7 +15,7 @@ class InviteType extends AbstractType
     {
         $builder
             ->add('users', EntityType::class, [
-                'label' => 'Utilisateurs',
+                'label' => 'Qui sont vos invités ?',
                 'class' => User::class,
                 'choice_label' => 'email',
                 'multiple' => true,
@@ -27,7 +27,10 @@ class InviteType extends AbstractType
                     'placeholder' => 'Entrez l\'email de l\'utilisateur à inviter',
                 ],
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Inviter']);
+            ->add('submit', SubmitType::class, [
+                'label' => 'Envoyer les invitations',
+                'attr' => ['class' => 'btn btn-form']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

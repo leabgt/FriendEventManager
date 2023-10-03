@@ -16,20 +16,21 @@
             <div class="event-card">
                 <a href="{{ path('app_event_show', {'id': userevent.id}) }}">
                     <h3>{{ userevent.title }}</h3>
+                    <p> <i>Organisé par <strong>{{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</strong></i></p>
                     <div> {{userevent.category.name}}</div>
-                    <div> Organisé par {{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</div>
-                    <div> {{userevent.place}}</div>
-                    <time> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} </time>
-                    <time> au {{ userevent.endDate|date(format = 'j F Y H:i') }} </time>
+                    <div> <i class="fas fa-map-marker-alt"></i> {{userevent.place}}</div>
+                    <time> <i class="fas fa-calendar-alt"></i> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} au {{ userevent.endDate|date(format = 'j F Y H:i') }} </time>
                 </a>
-                <div class="event-management">
-                    <a href="{{ path('app_myevent_delete', {'id': userevent.id}) }}" title="Supprimer">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>
-                    <a href="{{ path('app_myevent_edit', {'id': userevent.id}) }}" title="Modifier">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
-                </div>
+                {% if app.user == userevent.organisator %}
+                    <div class="event-management">
+                        <a href="{{ path('app_myevent_delete', {'id': userevent.id}) }}" title="Supprimer">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                        <a href="{{ path('app_myevent_edit', {'id': userevent.id}) }}" title="Modifier">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

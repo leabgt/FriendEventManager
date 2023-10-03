@@ -6,11 +6,13 @@
 
 {% block body %}
 <div class="custom-container">
-<h2>Inviter un utilisateur à l'événement</h2>
+{# <h2>Inviter un utilisateur à l'événement</h2> #}
 
-{{ form_start(inviteForm) }}
-    {{ form_widget(inviteForm) }}
-{{ form_end(inviteForm) }}
+    <div class="invite-form">
+        {{ form_start(inviteForm) }}
+            {{ form_widget(inviteForm) }}
+        {{ form_end(inviteForm) }}
+    </div>
 </div>
 
 {% endblock %}

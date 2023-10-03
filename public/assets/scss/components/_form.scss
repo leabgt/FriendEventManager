@@ -78,7 +78,24 @@ select{
 
 /// INVITE FORM ///
 
-.invite-form-row{
-    display: flex;
-    flex-direction: column;
+.invite-form{
+    margin-top: 160px;
+    .invite-form-row{
+        display: flex;
+        flex-direction: column;
+        label {
+            margin-bottom: 20px;
+        }
+        .select2-selection{
+            border: none;
+        }
+    }
+}
+
+@media (min-width:768px) {
+    .invite-form{
+        margin: auto;
+        margin-top: 160px;
+        width:50%; 
+    }
 }

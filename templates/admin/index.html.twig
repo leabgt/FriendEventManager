@@ -8,10 +8,10 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper custom-container">
-    <ul>
-        <li><a href="{{ path('app_admin_category_index') }}">Catégories</a></li>
-        <li><a href="{{ path('app_admin_event_index') }}">Evènements</a></li>
-    </ul>
+<div class="custom-container">
+    <div class="admin-index">
+        <a href="{{ path('app_admin_category_index') }}">Catégories</a>
+        <a href="{{ path('app_admin_event_index') }}">Evènements</a>
+    </div>
 </div>
 {% endblock %}
