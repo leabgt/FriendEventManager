@@ -34,6 +34,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Date de naissance', // This is the label
                 'row_attr' => ['class' => 'register-form-row'],
                 'attr' => ['class' => 'datepicker'],
+                'mapped' => false,
             ])
             // ->add('agreeTerms', CheckboxType::class, [
             //     'mapped' => false,

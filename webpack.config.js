@@ -37,11 +37,12 @@ Encore
      * list of features, see:
      * https://symfony.com/doc/current/frontend.html#adding-more-features
      */
-    .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
+    .cleanupOutputBeforeBuild()
+    .enableBuildNotifications()
+    .enableSingleRuntimeChunk()
 
     // configure Babel
     // .configureBabel((config) => {
@@ -69,11 +70,13 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    .autoProvideVariables({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery',
-    })
+    .autoProvidejQuery()
+    // .autoProvideVariables({
+    //     $: 'jquery',
+    //     jQuery: 'jquery',
+    //     'window.jQuery': 'jquery'
+    //     // 'window.$': 'jquery'
+    // })
 ;
 
 module.exports = Encore.getWebpackConfig();

@@ -62,8 +62,9 @@ select{
             flex-wrap: wrap; 
             // justify-content: space-between; 
             .category-toggle-button{
-                flex: 0 0 calc(100% / 5);
+                flex: 0 0 calc(100%);
                 box-sizing: border-box;
+                // margin: auto; 
             }
         }
     }
@@ -73,4 +74,11 @@ select{
     .event-form{
         width:50%; 
     }
+}
+
+/// INVITE FORM ///
+
+.invite-form-row{
+    display: flex;
+    flex-direction: column;
 }

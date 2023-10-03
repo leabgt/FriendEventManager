@@ -1,3 +1,6 @@
+import 'jquery-ui/ui/widgets/datepicker';
+import 'jquery-datetimepicker';
+
 $(function() {
     $(".datepicker").datepicker({
         dateFormat: 'yy-mm-dd',

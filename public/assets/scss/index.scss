@@ -1,9 +1,19 @@
+@import 'select2/dist/css/select2.min.css';
+@import 'jquery-datetimepicker/jquery.datetimepicker.css';
+
+
 @import 'variables';
+@import 'fonts'; 
+
 @import 'components/navbar';
 @import 'components/custom-container';
 @import 'components/event-cards';
-@import 'fonts'; 
 @import 'components/form'; 
 @import 'components/button'; 
-@import 'components/footer'
+@import 'components/footer'; 
+
+@import 'templates/account.scss'; 
+
+
+
  

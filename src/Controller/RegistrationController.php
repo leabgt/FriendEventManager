@@ -57,6 +57,10 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $birthDateString = $form->get('birthDate')->getData();
+            $birthDate = \DateTime::createFromFormat('Y-m-d', $birthDateString);
+            $user->setBirthDate($birthDate);
+
             $entityManager->persist($user);
             $entityManager->flush();
             // Faites tout ce dont vous avez besoin ici, comme envoyer un e-mail.

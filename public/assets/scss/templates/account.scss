@@ -1,0 +1,25 @@
+.account-index{
+    display: flex;
+    flex-direction: column;
+    margin-top: 160px;
+    a {
+        background-color: $red;
+        color: $white;
+        text-decoration: none;
+        border-radius: 3px;
+        padding: 10px 20px;
+        margin:auto; 
+        margin-bottom: 32px;
+        width: 80%;
+        text-align: center;
+        font-size: 24px;
+    }
+}
+
+@media (min-width:768px) {
+    .account-index{
+        a{
+            width:50%;
+        } 
+    }
+}

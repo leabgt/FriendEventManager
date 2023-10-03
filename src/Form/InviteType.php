@@ -19,9 +19,11 @@ class InviteType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'email',
                 'multiple' => true,
-                'expanded' => true,
+                'row_attr' => [
+                    'class' => 'invite-form-row',
+                ],
                 'attr' => [
-                    'class' => 'user-select',
+                    'class' => 'user-select js-select2',
                     'placeholder' => 'Entrez l\'email de l\'utilisateur à inviter',
                 ],
             ])

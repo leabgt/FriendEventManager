@@ -1,13 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountEventController!{% endblock %}
+{% block title %}Mes événements{% endblock %}
 
 {% block body %}
 <div class="custom-container">
-    {% for event in events %}
-        <h1>{{ event.title }}</h1>
-        <div>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</div>
-        <div>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</div>
-    {% endfor %}
+    <h2>MES ÉVÈNEMENTS</h2>
+    <div class="event-cards">
+            {% for event in events %}
+            <div class="event-card">
+                <a href="{{ path('app_event_show', {'id': event.id}) }}">
+                    <h3>{{ event.title }}</h3>
+                    <div> {{event.category.name}}</div>
+                    <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
+                    <div> {{event.place}}</div>
+                    <time> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </time>
+                    <time> au {{ event.endDate|date(format = 'j F Y H:i') }} </time>
+                </a>
+                <div class="event-management">
+                    <a href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    <a href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 </div>
 {% endblock %}

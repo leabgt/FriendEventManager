@@ -7,10 +7,12 @@
   top: 0;
   left: 0;
   width: 100%;
+  
 
   .navbar-content {
     margin-top: 0!important;
     display: flex;
+    min-height: fit-content!important;
   }
 
   .menu-button {

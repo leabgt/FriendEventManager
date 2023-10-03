@@ -37,19 +37,19 @@
 
     <div class="event-form-row">
         <label class="required">Cet événement est-il privé ?</label>   
-        <button id="event_isPrivate_yes" class="toggle-button {{ form.isPrivate.vars.value == '1' ? 'active' : '' }}" data-value="1">Oui</button>
-        <button id="event_isPrivate_no" class="toggle-button {{ form.isPrivate.vars.value == '0' ? 'active' : '' }}" data-value="0">Non</button>
+        <button id="event_isPrivate_yes" class="toggle-button {{ form.isPrivate.vars.value == '1' ? 'active' : '' }}" data-value="1" type="button">Oui</button>
+        <button id="event_isPrivate_no" class="toggle-button {{ form.isPrivate.vars.value == '0' ? 'active' : '' }}" data-value="0" type="button">Non</button>
         {{ form_widget(form.isPrivate) }} {# Ceci va rendre le champ caché #}
     </div>
 
     <div class="event-form-row">
         <label class="required">Y-a-t-il une participation financière ?</label>
-        <button id="event_isFinancialParticipation_yes" class="toggle-button {{ form.isFinancialParticipation.vars.value == '1' ? 'active' : '' }}" data-value="1">Oui</button>
-        <button id="event_isFinancialParticipation_no" class="toggle-button {{ form.isFinancialParticipation.vars.value == '0' ? 'active' : '' }}" data-value="0">Non</button>
+        <button id="event_isFinancialParticipation_yes" class="toggle-button {{ form.isFinancialParticipation.vars.value == '1' ? 'active' : '' }}" data-value="1" type="button">Oui</button>
+        <button id="event_isFinancialParticipation_no" class="toggle-button {{ form.isFinancialParticipation.vars.value == '0' ? 'active' : '' }}" data-value="0" type="button">Non</button>
         {{ form_widget(form.isFinancialParticipation) }} {# Ceci va rendre le champ caché #}
     </div>
 
-    <div class="event-form-row">
+    <div class="event-form-row" id="event_financialParticipationAmount">
         {{ form_label(form.financialParticipationAmount) }}
         {{ form_widget(form.financialParticipationAmount) }}
     </div>

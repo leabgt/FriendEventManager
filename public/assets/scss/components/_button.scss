@@ -7,18 +7,22 @@
     color: $white; 
     padding: 10px;
     width: 100%;
+    cursor: pointer;
 }
 
 .toggle-button {
     padding: 8px 15px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
+    background-color: $white;
+    // border: 1px solid #ddd;
+    border-radius: 3px; 
+    border: none;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin: 0 5px; /* Ajout d'une petite marge entre les boutons */
+    margin: 5px 5px; /* Ajout d'une petite marge entre les boutons */
+    font-size: 16px; 
 }
 
 .toggle-button.active {
-    background-color: #007bff;
+    background-color: $green;
     color: white;
 }

@@ -27,12 +27,18 @@ function setActive(value) {
 const yesButtonFinancial = document.getElementById('event_isFinancialParticipation_yes');
 const noButtonFinancial = document.getElementById('event_isFinancialParticipation_no');
 const inputHiddenFinancial = document.querySelector('input[name="event[isFinancialParticipation]"]');
+const financialParticipationAmount = document.getElementById('event_financialParticipationAmount');
 
-yesButtonFinancial.addEventListener('click', function() {
+// Cachez initialement le champ financialParticipationAmount
+financialParticipationAmount.style.display = 'none';
+
+yesButtonFinancial.addEventListener('click', function(e) {
+    e.preventDefault(); // Empêche la soumission du formulaire
     setActiveFinancial('1');
 });
 
-noButtonFinancial.addEventListener('click', function() {
+noButtonFinancial.addEventListener('click', function(e) {
+    e.preventDefault(); // Empêche la soumission du formulaire
     setActiveFinancial('0');
 });
 
@@ -41,10 +47,12 @@ function setActiveFinancial(value) {
         yesButtonFinancial.classList.add('active');
         noButtonFinancial.classList.remove('active');
         inputHiddenFinancial.value = '1';
+        financialParticipationAmount.style.display = 'flex'; // Affiche le champ
     } else {
         noButtonFinancial.classList.add('active');
         yesButtonFinancial.classList.remove('active');
         inputHiddenFinancial.value = '0';
+        financialParticipationAmount.style.display = 'none'; // Cache le champ
     }
 }
 
