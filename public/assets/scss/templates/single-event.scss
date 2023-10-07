@@ -1,0 +1,31 @@
+.single-event {
+    .single-event-img{
+        img {
+            height: 300px;
+            width: 300px;
+            object-fit: cover;
+        }
+    }
+    .single-event-participate{
+        background-color: $green;
+        font-size: 24px;
+        border-radius: 3px; 
+        text-align: center; 
+        padding: 10px 0;
+        a{
+            color: $white;
+            text-decoration: none;
+        }
+    }
+    .single-event-cancel{
+        background-color: $red;
+        font-size: 24px;
+        border-radius: 3px; 
+        text-align: center; 
+        padding: 10px 0;
+        a{
+            color: $white;
+            text-decoration: none;
+        }
+    }
+}

@@ -1,12 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'événement{{ parent() }}{% endblock %}
+{% block title %}{{ event.title }}{% endblock %}
 
 {% block body %}
-<div class="custom-container">
-    <h1>Détails de l'événement</h1>
+<div class="custom-container single-event">
+    <h1>{{ event.title }}</h1>
+    <div>Organisé par {{event.organisator.firstName }} {{ event.organisator.lastName}}</div>
 
-    <p><strong>Titre :</strong> {{ event.title }}</p>
+    <div class="single-event-img">
+    {% if event.category.imageUrl %}
+        <img src="{{ event.category.imageUrl }}">
+    {% endif %}
+    </div>
+
     <!-- Ajoutez ici d'autres informations de l'événement que vous souhaitez afficher -->
     {% if is_granted('IS_AUTHENTICATED_FULLY') and event.organisator == app.user %}
         <a href="{{ path('app_event_invite', {'id': event.id}) }}">Inviter un utilisateur</a>
@@ -14,15 +20,18 @@
 
     {% set canParticipate = false %}
 
-    {# Si l'événement n'est pas privé ou si l'utilisateur a été invité mais n'a pas confirmé sa participation. #}
-    {% if not event.isIsPrivate %}
-        {% set canParticipate = true %}
+    {% if not event.isIsPrivate and (existingRegistration is null or not existingRegistration.isHasConfirmed) %}
+        <div class="single-event-participate">
+            <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
+        </div>
     {% elseif existingRegistration and not existingRegistration.isHasConfirmed %}
-        {% set canParticipate = true %}
-    {% endif %}
-
-    {% if canParticipate %}
-        <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
+        <div class="single-event-participate">
+            <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
+        </div>
+    {% elseif existingRegistration and existingRegistration.isHasConfirmed and app.user != event.organisator %}
+        <div class="single-event-cancel">
+            <a href="{{ path('app_event_cancel_participation', {'id': event.id}) }}" class="btn btn-danger">Annuler la participation</a>
+        </div>
     {% endif %}
 
     {% if event.isIsFinancialParticipation %}
@@ -32,7 +41,16 @@
                 Contribuer à l'événement ({{ event.getFinancialParticipationAmount() }}€)
             </a>
         {% endif %}
+    {% else %}
+        <h3>Aucune contribution financière</h3>
     {% endif %}
+
+    <h2>PARTICIPANTS</h2>
+    {% for registration in event.registrations %}
+        {% if registration.isHasConfirmed and registration.user %}
+            <div>{{registration.user.firstName}} {{registration.user.lastName}}</div>
+        {% endif %}
+    {% endfor %}
 
 </div>
 {% endblock %}

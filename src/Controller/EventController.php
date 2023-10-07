@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Event;
 use App\Entity\Registration;
 use App\Entity\Notification;
+use App\Entity\User;
 use App\Form\InviteType;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
@@ -112,6 +113,12 @@ class EventController extends AbstractController
     {
         $user = $security->getUser();
 
+        // Si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion.
+        if (null === $user) {
+            $this->addFlash('warning', 'Vous devez être connecté pour participer à un événement.');
+            return $this->redirectToRoute('app_login'); // Remplacez 'app_login' par le nom de votre route de connexion.
+        }
+
         // Vérifiez si l'utilisateur a déjà une registration pour cet événement.
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
 
@@ -136,6 +143,25 @@ class EventController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Votre participation a été enregistrée.');
+        }
+
+        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
+    }
+
+    #[Route('/evenement/{id}/cancel-participation', name: 'app_event_cancel_participation')]
+    public function cancelParticipation(Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $em, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
+
+        // Vérifiez si l'utilisateur a déjà confirmé sa participation.
+        if ($existingRegistration && $existingRegistration->isHasConfirmed()) {
+            $existingRegistration->setHasConfirmed(false);
+            $em->flush();
+            $this->addFlash('success', 'Votre participation a été annulée.');
+        } else {
+            $this->addFlash('warning', 'Vous n’êtes pas inscrit à cet événement ou avez déjà annulé.');
         }
 
         return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);

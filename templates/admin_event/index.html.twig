@@ -1,44 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Event index{% endblock %}
+{% block title %}Admin - Événements {% endblock %}
 
 {% block body %}
-    <h1>Event index</h1>
+<div class="custom-container">
+    <h1>Événements</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>IsPrivate</th>
-                <th>IsFinancialParticipation</th>
-                <th>FinancialParticipationAmount</th>
-                <th>actions</th>
+                <th>Nom</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Privé ?</th>
+                <th>Participation financière</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for event in events %}
             <tr>
-                <td>{{ event.id }}</td>
                 <td>{{ event.title }}</td>
                 <td>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.isPrivate ? 'Yes' : 'No' }}</td>
                 <td>{{ event.isFinancialParticipation ? 'Yes' : 'No' }}</td>
                 <td>{{ event.financialParticipationAmount }}</td>
-                <td>
-                    <a href="{{ path('app_admin_event_show', {'id': event.id}) }}">show</a>
-                    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}">edit</a>
-                </td>
+                <td><a href="{{ path('app_event_show', {'id': event.id}) }}">show</a></td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="10">no records found</td>
+                <td colspan="10">Aucun événement</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+</div>
 
 {% endblock %}

@@ -7,7 +7,7 @@
       text-decoration: none;
       color: $black;
     }
-  
+
     @media (min-width: 600px) {
       grid-template-columns: repeat($tablet-columns, 1fr);
     }
@@ -28,6 +28,11 @@
       p{
         margin: 0;
       }
+      img {
+        height: 200px;
+        width: 300px; 
+        object-fit: cover;
+      }  
       .event-management{
         display: flex;
         a {

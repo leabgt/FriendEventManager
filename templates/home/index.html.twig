@@ -17,6 +17,9 @@
                 <a href="{{ path('app_event_show', {'id': userevent.id}) }}">
                     <h3>{{ userevent.title }}</h3>
                     <p> <i>Organisé par <strong>{{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</strong></i></p>
+                    {% if userevent.category.imageUrl %}
+                        <img src="{{ userevent.category.imageUrl }}">
+                    {% endif %}
                     <div> {{userevent.category.name}}</div>
                     <div> <i class="fas fa-map-marker-alt"></i> {{userevent.place}}</div>
                     <time> <i class="fas fa-calendar-alt"></i> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} au {{ userevent.endDate|date(format = 'j F Y H:i') }} </time>
@@ -45,8 +48,11 @@
                 <a href="{{ path('app_event_show', {'id': event.id}) }}">
                         <div class="event-card">
                             <h3>{{ event.title }}</h3>
-                            <div> {{event.category.name}}</div>
                             <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
+                            {% if event.category.imageUrl %}
+                                <img src="{{ event.category.imageUrl }}">
+                            {% endif %}
+                            <div> {{event.category.name}}</div>
                             <div> {{event.place}}</div>
                             <time> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </time>
                             <time> au {{ event.endDate|date('j F Y H:i') }} </time>

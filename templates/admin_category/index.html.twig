@@ -1,37 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}Admin - Categorie{% endblock %}
 
 {% block body %}
-    <div class="custom-container">
-    <h1>Category index</h1>
+    <div class="custom-container admin-category-index">
+    <h1>Gestion des catégories des événements</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td>
-                <td>
-                    <a href="{{ path('app_admin_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_admin_category_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_admin_category_new') }}">Create new</a>
+        <div class="add-category">
+            <a href="{{ path('app_admin_category_new') }}">Ajouter une nouvelle catégorie</a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom de la catégorie</th>
+                    <th class="actions-th">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td class="actions-td">
+                        <a href="{{ path('app_admin_category_delete', {'id': category.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                        <a href="{{ path('app_admin_category_edit', {'id': category.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucune catégorie</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
