@@ -1,31 +1,100 @@
 .single-event {
+
+    .event-title{
+        h1{
+            margin-bottom: 8px; 
+        }
+        p{
+            margin-top: 0; 
+        }
+    }
+
+    .event-management {
+        margin-top: 16px;
+        .fa-trash-alt {
+            color: $red;
+          }
+          .fa-pencil-alt {
+            color: $green; 
+            margin-left: 16px;
+          }
+    }
+
     .single-event-img{
+        margin-bottom: 32px;
         img {
             height: 300px;
-            width: 300px;
+            width: 100%;
             object-fit: cover;
+            border-radius: 3px;
+            margin-top: 48px;
         }
     }
-    .single-event-participate{
-        background-color: $green;
-        font-size: 24px;
-        border-radius: 3px; 
-        text-align: center; 
-        padding: 10px 0;
-        a{
-            color: $white;
-            text-decoration: none;
+    
+    .event-participation{
+        margin-bottom: 32px;
+        .single-event-participate{
+            background-color: $green;
+            font-size: 24px;
+            border-radius: 3px; 
+            text-align: center; 
+            padding: 10px 0;
+            a{
+                color: $white;
+                text-decoration: none;
+                font-size: 24px;
+            }
+        }
+        .single-event-cancel{
+            background-color: $red;
+            
+            border-radius: 3px; 
+            text-align: center; 
+            padding: 10px 0;
+            a{
+                color: $white;
+                text-decoration: none;
+                font-size: 24px;
+            }
         }
     }
-    .single-event-cancel{
-        background-color: $red;
-        font-size: 24px;
-        border-radius: 3px; 
-        text-align: center; 
-        padding: 10px 0;
-        a{
-            color: $white;
-            text-decoration: none;
+
+    .event-description {
+        p{
+            margin-top: 0;
+            margin-bottom: 8px;
         }
+    }
+
+    .event-financial-contribution {
+        margin-top: 32px;
+        color: $white;
+        .financial-contribution-content{
+            background-color: $red;
+            border-radius: 3px; 
+            padding: 16px;
+            .financial-contribution-collected {
+                color: $white;
+                p {
+                    color: $white;
+                    font-size: 24px;
+                    margin-left: 16px;
+                }
+            }
+            .btn-contribute {
+                background-color: $white;
+                padding: 16px;
+                text-align: center;
+                border-radius: 3px;
+                a{
+                    text-decoration: none;
+                    font-size: 24px;
+                }
+            }
+        }
+    }
+
+    .event-participant-list {
+        margin-top: 32px;
     }
 }

@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Service\DateFormatterService;
 
 class EventController extends AbstractController
 {
@@ -31,10 +33,23 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement', name: 'app_event')]
-    public function index(): Response
+    public function index(EventRepository $eventRepository, Security $security, DateFormatterService $dateFormatter): Response
     {
+        setlocale(LC_TIME, 'fr_FR.UTF-8');
+
+        $user = $security->getUser();
+        $limit = null;  
+
+        if ($user) {
+            $events = $eventRepository->findEventsWithoutUnconfirmedRegistration($user, $limit);  
+        } else {
+            $events = $eventRepository->findLimitedEvents($limit);  
+        }
+
         return $this->render('event/index.html.twig', [
-            'controller_name' => 'EventController',
+            'events' => $events,
+            'user' => $user,
+            'dateFormatter' => $dateFormatter,
         ]);
     }
 
@@ -46,10 +61,14 @@ class EventController extends AbstractController
         // $fundraising = $fundraisingRepository->findOneBy(['event' => $event]);
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
 
+        $confirmedParticipants = $registrationRepository->findBy(['event' => $event, 'hasConfirmed' => true]);
+
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
             // 'fundraising' => $fundraising,  // Passez l'objet Fundraising entier
             'existingRegistration' => $existingRegistration,
+            'participants' => $confirmedParticipants,  // Ajout de la liste des participants
         ]);
     }
 
@@ -91,7 +110,15 @@ class EventController extends AbstractController
                 // Créez une notification pour l'utilisateur
                 $notification = new Notification();
                 $notification->setUser($user);
-                $notification->setMessage('Vous avez été invité à l\'événement ' . $event->getTitle() . '.');
+
+                $eventLink = $this->generateUrl('app_event_show', ['id' => $event->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $notificationMessage = sprintf(
+                    'Vous avez été invité à l\'événement <a href="%s">%s</a>.',
+                    $eventLink,
+                    htmlspecialchars($event->getTitle(), ENT_QUOTES, 'UTF-8')
+                );
+
+                $notification->setMessage($notificationMessage);
 
                 $entityManager->persist($notification);
             }

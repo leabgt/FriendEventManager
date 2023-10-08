@@ -1,0 +1,7 @@
+<p><strong> {{event.category.name}}</strong></p>
+<p><i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
+<time> 
+    <i class="fas fa-calendar-alt"></i> 
+    Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
+    au {{ event.endDate|date('d/m/Y à H\\hi') }}
+</time>

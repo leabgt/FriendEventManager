@@ -1,6 +1,5 @@
 .footer {
     background-color: $green;
-    color: $white;
     width: 100%;
     position: absolute;
     left: 0;
@@ -10,6 +9,7 @@
         min-height: fit-content!important;
         padding: 0;
         p {
+            color: $white;
             text-align: center;
         }
     }

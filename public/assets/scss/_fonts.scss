@@ -17,6 +17,12 @@ body {
     font-family: 'Commissioner' ;
 }
 
+h1 {
+    font-size: 40px;
+    color: $black;
+    font-family: 'Commissioner-black';
+}
+
 h2 {
     font-size: 32px;
     color: $purple; 
@@ -27,4 +33,13 @@ h3 {
     font-family: 'Commissioner-medium';
     margin: 10px 0 20px 0;
     font-size: 24px;
+}
+
+p {
+    font-size: 18px;
+    color: $black; 
+}
+
+a {
+    font-size: 18px;
 }

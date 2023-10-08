@@ -21,7 +21,7 @@
                             <li>Aucune notification</li>
                         {% else %}
                             {% for notification in allNotifications %}
-                                <li data-id="{{ notification.id }}">{{ notification.message }}</li>
+                                <li data-id="{{ notification.id }}">{{ notification.message|raw }}</li>
                             {% endfor %}
                         {% endif %}
                     </ul>

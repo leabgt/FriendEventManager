@@ -1,16 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Facilitez l'organisation de vos événements entre amis{% endblock %}
+{% block title %}Friend Event Manager - Facilitez l'organisation de vos événements entre amis{% endblock %}
 
 {% block body %}
 
-<div class="custom-container">
+<div class="custom-container home-index">
 
-    <h1>Facilitez l'organisation de vos événements entre amis</h1>
+    <h1>CRÉEZ VOTRE ÉVÉNEMENT EN QUELQUES CLICS</h1>
     
+    <div class="add-new-event-link"><a href="{{ path('app_account_event_new') }}">Créer un événement</a></div>
+
     {% if userevents is not empty %}
     <div class="myevents">
-        <h2>MES EVENEMENTS</h2>
+        <div class="event-title">
+            <h2>MES EVENEMENTS</h2>
+            <a href="{{ path('app_account_myevents') }}" class="myevents-link"> Voir tous mes événements</a>
+        </div>
         <div class="event-cards">
             {% for userevent in userevents %}
             <div class="event-card">
@@ -20,9 +25,15 @@
                     {% if userevent.category.imageUrl %}
                         <img src="{{ userevent.category.imageUrl }}">
                     {% endif %}
-                    <div> {{userevent.category.name}}</div>
-                    <div> <i class="fas fa-map-marker-alt"></i> {{userevent.place}}</div>
-                    <time> <i class="fas fa-calendar-alt"></i> Du {{ userevent.startDate ? userevent.startDate|date('j F Y H:i') : '' }} au {{ userevent.endDate|date(format = 'j F Y H:i') }} </time>
+                    <div class="event-description">
+                        <p><strong> {{userevent.category.name}}</strong></p>
+                        <p> <i class="fas fa-map-marker-alt"></i> {{userevent.place}}</p>
+                        <time> 
+                            <i class="fas fa-calendar-alt"></i> 
+                            Du {{ userevent.startDate ? userevent.startDate|date('d/m/Y à H\\hi') : '' }} 
+                            au {{ userevent.endDate|date('d/m/Y à H\\hi') }}
+                        </time>
+                    </div>
                 </a>
                 {% if app.user == userevent.organisator %}
                     <div class="event-management">
@@ -41,7 +52,10 @@
     {% endif %}
 
     <div class="events">
-        <h2> Participer à de nouveaux événements </h2>
+        <div class="event-title">
+            <h2> Participer à de nouveaux événements </h2>
+            <a href="{{ path('app_event') }}" class="event-link"> Tous les événements</a>
+        <div>
         <div class="event-cards">
         {% for event in events %}
             {% if not event.isPrivate %}
@@ -52,16 +66,24 @@
                             {% if event.category.imageUrl %}
                                 <img src="{{ event.category.imageUrl }}">
                             {% endif %}
-                            <div> {{event.category.name}}</div>
-                            <div> {{event.place}}</div>
-                            <time> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </time>
-                            <time> au {{ event.endDate|date('j F Y H:i') }} </time>
+                            <div class="event-description">
+                                <p><strong> {{event.category.name}}</strong></p>
+                                <p><i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
+                                <time> 
+                                    <i class="fas fa-calendar-alt"></i> 
+                                    Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
+                                    au {{ event.endDate|date('d/m/Y à H\\hi') }}
+                                </time>
+                            </div>
                         </div>
                     </a>
             {% endif %}
         {% endfor %}
         </div>
     </div>
+
+    <div class="app-description">{% include 'home/_description.html.twig' %}</div>
+
 </div>
 
 {% endblock %}

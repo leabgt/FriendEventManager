@@ -19,12 +19,13 @@ class HomeController extends AbstractController
 
         $user = $security->getUser();
         $events = $userevents = null;
+        $limit = 8;  
 
         if ($user) {
-            $userevents = $eventRepository->findEventsByUser($user);
-            $events = $eventRepository->findEventsWithoutUnconfirmedRegistration($user);
+            $userevents = $eventRepository->findEventsByUser($user, $limit); 
+            $events = $eventRepository->findEventsWithoutUnconfirmedRegistration($user, $limit);  
         } else {
-            $events = $eventRepository->findAll();
+            $events = $eventRepository->findLimitedEvents($limit);  
         }
 
         return $this->render('home/index.html.twig', [
