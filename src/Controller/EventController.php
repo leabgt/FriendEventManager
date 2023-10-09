@@ -8,11 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Event;
 use App\Entity\Registration;
 use App\Entity\Notification;
-use App\Entity\User;
+use App\Entity\Comment; 
+use App\Entity\User; 
 use App\Form\InviteType;
+use App\Form\CommentType; 
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use App\Form\EventType;
+use App\Repository\CommentRepository;
 use App\Repository\RegistrationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -25,11 +28,13 @@ class EventController extends AbstractController
 {
     private $entityManager;
     private $userRepository;
+    private $commentRepository; 
 
-    public function __construct(EntityManagerInterface $entityManager, UserRepository $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, UserRepository $userRepository, CommentRepository $commentRepository)
     {
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
+        $this->commentRepository = $commentRepository; 
     }
 
     #[Route('/evenement', name: 'app_event')]
@@ -54,21 +59,35 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/{id}', name: 'app_event_show')]
-    public function show(Event $event, RegistrationRepository $registrationRepository, Security $security): Response
+    public function show(Event $event, RegistrationRepository $registrationRepository, Security $security, Request $request): Response
     {
         $user = $security->getUser();
-
-        // $fundraising = $fundraisingRepository->findOneBy(['event' => $event]);
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
-
         $confirmedParticipants = $registrationRepository->findBy(['event' => $event, 'hasConfirmed' => true]);
-
-
+    
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+    
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setEvent($event);
+            $comment->setUser($user);
+            $comment->setCreatedAt(new \DateTimeImmutable()); // Setting createdAt here
+    
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush();
+    
+            $this->addFlash('success', 'Votre commentaire a été publié avec succès !');
+            
+            // Redirigez à nouveau vers la page de l'événement pour afficher le nouveau commentaire
+            return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
+        }
+    
         return $this->render('event/show.html.twig', [
             'event' => $event,
-            // 'fundraising' => $fundraising,  // Passez l'objet Fundraising entier
             'existingRegistration' => $existingRegistration,
-            'participants' => $confirmedParticipants,  // Ajout de la liste des participants
+            'participants' => $confirmedParticipants,
+            'comment_form' => $commentForm->createView(),
         ]);
     }
 

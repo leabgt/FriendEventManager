@@ -27,13 +27,21 @@
         {% include 'event/includes/_event-description.html.twig' %}
     </div>
 
-    <div class="event-financial-contribution">
-        {% include 'event/includes/_event-financial-contribution.html.twig' %}
-    </div>
+    {% if existingRegistration is not null and existingRegistration.isHasConfirmed %}
+        <div class="event-financial-contribution">
+            {% include 'event/includes/_event-financial-contribution.html.twig' %}
+        </div>
+    {% endif %}
 
     <div class="event-participant-list">
         {% include 'event/includes/_event-participant-list.html.twig' %}
     </div>
+
+    {% if existingRegistration is not null and existingRegistration.isHasConfirmed %}
+        <div class="event-comment">
+            {% include 'event/includes/_event-comment.html.twig' %}
+        </div>
+    {% endif %}
 
 </div>
 {% endblock %}

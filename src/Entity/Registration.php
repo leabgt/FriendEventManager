@@ -15,14 +15,14 @@ class Registration
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'registrations')]
-    private ?event $event = null;
+    private ?Event $event = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registrationDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'registrations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\Column]
     private ?bool $isInvited = false;
@@ -38,12 +38,12 @@ class Registration
         return $this->id;
     }
 
-    public function getEvent(): ?event
+    public function getEvent(): ?Event
     {
         return $this->event;
     }
 
-    public function setEvent(?event $event): static
+    public function setEvent(?Event $event): static
     {
         $this->event = $event;
 
@@ -62,12 +62,12 @@ class Registration
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 

@@ -10,22 +10,32 @@
             <div class="event-card">
                 <a href="{{ path('app_event_show', {'id': event.id}) }}">
                     <h3>{{ event.title }}</h3>
-                    <div> {{event.category.name}}</div>
-                    <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
-                    <div> {{event.place}}</div>
-                    <time> Du {{ event.startDate ? event.startDate|date('j F Y H:i') : '' }} </time>
-                    <time> au {{ event.endDate|date(format = 'j F Y H:i') }} </time>
+                    <p> <i>Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></i></p>
+                    {% if event.category.imageUrl %}
+                        <img src="{{ event.category.imageUrl }}">
+                    {% endif %}
+                    <div class="event-description">
+                        <p><strong> {{event.category.name}}</strong></p>
+                        <p> <i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
+                        <time> 
+                            <i class="fas fa-calendar-alt"></i> 
+                            Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
+                            au {{ event.endDate|date('d/m/Y à H\\hi') }}
+                        </time>
+                    </div>
                 </a>
-                <div class="event-management">
-                    <a href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>
-                    <a href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
-                </div>
+                {% if app.user == event.organisator %}
+                    <div class="event-management">
+                        <a href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                        <a href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
             {% endfor %}
-        </div>
+    </div>
 </div>
 {% endblock %}

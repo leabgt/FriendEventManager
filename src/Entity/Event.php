@@ -54,10 +54,14 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Payment::class)]
     private Collection $payments;
 
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Comment::class)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -239,6 +243,36 @@ class Event
             // set the owning side to null (unless already changed)
             if ($payment->getEvent() === $this) {
                 $payment->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getEvent() === $this) {
+                $comment->setEvent(null);
             }
         }
 

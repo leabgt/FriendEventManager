@@ -1,14 +1,15 @@
 <h2>PARTICIPANTS</h2>
 <ul>
 {% for participant in participants %}
-    <li>{{ participant.getUser().getFirstName() }} {{ participant.getUser().getLastName() }}
-    {% if event.isIsFinancialParticipation %}
-        {% if participant.isHasParticipated %}
+    <li>
+        {{ participant.user.firstName }} {{ participant.user.lastName }}
+        {% if event.isIsFinancialParticipation %}
+            {% if participant.isHasParticipated %}
                 <i class="fas fa-check"></i>
             {% else %}
                 <i class="fas fa-times"></i>
-        {% endif %}  
-    {% endif %}      
+            {% endif %}  
+        {% endif %}
     </li>
 {% else %}
     <li>Aucun participant</li>

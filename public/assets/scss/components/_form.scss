@@ -99,3 +99,22 @@ select{
         width:50%; 
     }
 }
+
+/// COMMENT FORM /// 
+
+.comment-form {
+    .comment-content-form {
+        display: flex;
+        flex-direction: column;
+        textarea {
+            height: 100px;
+            font-family: 'Commissioner';
+            font-size: 18px;
+            border: none;
+            padding: 8px;
+            :hover {
+                border: none;
+            }
+        }
+    }
+}

@@ -57,6 +57,7 @@
                 font-size: 24px;
             }
         }
+
     }
 
     .event-description {
@@ -92,9 +93,32 @@
                 }
             }
         }
+        @media (min-width: 768px) {
+            width: 40%;
+        }
     }
 
     .event-participant-list {
         margin-top: 32px;
+    }
+
+    .event-comment{
+        margin-top: 32px;
+        h2 {
+            margin-bottom: 16px;
+        }
+        .comment-form{
+            margin-bottom: 16px; 
+        }
+        .event-comments{
+            .event-comment-show{
+                background-color: rgba($white, 0.7);  // Ici, 0.5 est le niveau d'opacité
+                padding: 16px;
+                border-radius: 3px;
+                p{
+                    margin-top: 0;
+                }
+            }
+        }
     }
 }

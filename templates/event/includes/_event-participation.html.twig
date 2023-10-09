@@ -1,10 +1,7 @@
 {% set canParticipate = false %}
+{% set showParticipateButton = not event.isIsPrivate and (existingRegistration is null or not existingRegistration.isHasConfirmed) or (existingRegistration and not existingRegistration.isHasConfirmed) %}
 
-{% if not event.isIsPrivate and (existingRegistration is null or not existingRegistration.isHasConfirmed) %}
-    <div class="single-event-participate">
-        <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
-    </div>
-{% elseif existingRegistration and not existingRegistration.isHasConfirmed %}
+{% if showParticipateButton %}
     <div class="single-event-participate">
         <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
     </div>
