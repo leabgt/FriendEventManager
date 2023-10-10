@@ -9,7 +9,7 @@
             {% for event in events %}
             <div class="event-card">
                 <a href="{{ path('app_event_show', {'id': event.id}) }}">
-                    <h3>{{ event.title }}</h3>
+                    <h3 class="event-title">{{ event.title }}</h3>
                     <p> <i>Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></i></p>
                     {% if event.category.imageUrl %}
                         <img src="{{ event.category.imageUrl }}">

@@ -8,10 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Event;
 use App\Entity\Registration;
 use App\Entity\Notification;
-use App\Entity\Comment; 
-use App\Entity\User; 
+use App\Entity\Comment;
+use App\Entity\User;
 use App\Form\InviteType;
-use App\Form\CommentType; 
+use App\Form\CommentType;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use App\Form\EventType;
@@ -28,13 +28,25 @@ class EventController extends AbstractController
 {
     private $entityManager;
     private $userRepository;
-    private $commentRepository; 
+    private $commentRepository;
 
     public function __construct(EntityManagerInterface $entityManager, UserRepository $userRepository, CommentRepository $commentRepository)
     {
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
-        $this->commentRepository = $commentRepository; 
+        $this->commentRepository = $commentRepository;
+    }
+
+    private function getLoggedUser(): ?User
+    {
+        return $this->getUser();
+    }
+
+    private function denyUnlessLogged()
+    {
+        if (!$this->getLoggedUser()) {
+            throw new AccessDeniedException();
+        }
     }
 
     #[Route('/evenement', name: 'app_event')]
@@ -43,12 +55,11 @@ class EventController extends AbstractController
         setlocale(LC_TIME, 'fr_FR.UTF-8');
 
         $user = $security->getUser();
-        $limit = null;  
 
         if ($user) {
-            $events = $eventRepository->findEventsWithoutUnconfirmedRegistration($user, $limit);  
+            $events = $eventRepository->findEventsWithoutUnconfirmedRegistration($user);
         } else {
-            $events = $eventRepository->findLimitedEvents($limit);  
+            $events = $eventRepository->findLimitedEvents();
         }
 
         return $this->render('event/index.html.twig', [
@@ -64,25 +75,22 @@ class EventController extends AbstractController
         $user = $security->getUser();
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
         $confirmedParticipants = $registrationRepository->findBy(['event' => $event, 'hasConfirmed' => true]);
-    
+
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
-    
+
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setEvent($event);
             $comment->setUser($user);
-            $comment->setCreatedAt(new \DateTimeImmutable()); // Setting createdAt here
-    
+            $comment->setCreatedAt(new \DateTimeImmutable());
+
             $this->entityManager->persist($comment);
             $this->entityManager->flush();
-    
-            $this->addFlash('success', 'Votre commentaire a été publié avec succès !');
-            
-            // Redirigez à nouveau vers la page de l'événement pour afficher le nouveau commentaire
+
             return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
         }
-    
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
             'existingRegistration' => $existingRegistration,
@@ -94,7 +102,9 @@ class EventController extends AbstractController
     #[Route('/evenement/{id}/invite', name: 'app_event_invite')]
     public function invite(Request $request, Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $entityManager): Response
     {
-        if ($this->getUser() !== $event->getOrganisator()) {
+        $this->denyUnlessLogged();
+
+        if ($this->getLoggedUser() !== $event->getOrganisator()) {
             throw new AccessDeniedException('Vous n\'êtes pas autorisé à inviter des utilisateurs à cet événement.');
         }
 
@@ -102,7 +112,7 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $selectedUsers = $form->get('users')->getData(); // Récupérez les utilisateurs sélectionnés.
+            $selectedUsers = $form->get('users')->getData();
 
             foreach ($selectedUsers as $user) {
                 $existingRegistration = $registrationRepository->findOneBy([
@@ -111,9 +121,7 @@ class EventController extends AbstractController
                 ]);
 
                 if ($existingRegistration) {
-                    // Cet utilisateur est déjà enregistré pour cet événement.
-                    $this->addFlash('warning', 'L\'utilisateur ' . $user->getEmail() . ' est déjà invité à cet événement.');
-                    continue; // Passez à l'utilisateur suivant sans créer de nouvelle invitation.
+                    continue;
                 }
 
                 $registration = new Registration();
@@ -126,7 +134,6 @@ class EventController extends AbstractController
 
                 $entityManager->persist($registration);
 
-                // Créez une notification pour l'utilisateur
                 $notification = new Notification();
                 $notification->setUser($user);
 
@@ -144,7 +151,6 @@ class EventController extends AbstractController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Invitations envoyées avec succès!');
             return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
         }
 
@@ -157,28 +163,22 @@ class EventController extends AbstractController
     #[Route('/evenement/{id}/participate', name: 'app_event_participate')]
     public function participate(Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $em, Security $security): Response
     {
-        $user = $security->getUser();
+        $this->denyUnlessLogged();
+        $user = $this->getLoggedUser();
 
-        // Si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion.
         if (null === $user) {
-            $this->addFlash('warning', 'Vous devez être connecté pour participer à un événement.');
-            return $this->redirectToRoute('app_login'); // Remplacez 'app_login' par le nom de votre route de connexion.
+            return $this->redirectToRoute('app_login');
         }
 
-        // Vérifiez si l'utilisateur a déjà une registration pour cet événement.
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
 
         if ($existingRegistration) {
-            // Si l'utilisateur a déjà une registration mais n'a pas encore confirmé sa participation, confirmez-la.
             if (!$existingRegistration->isHasConfirmed()) {
                 $existingRegistration->setHasConfirmed(true);
                 $em->flush();
-                $this->addFlash('success', 'Votre participation a été confirmée.');
             } else {
-                $this->addFlash('warning', 'Vous êtes déjà inscrit à cet événement.');
             }
         } else {
-            // Si l'utilisateur n'a pas de registration, créez-en une nouvelle.
             $registration = new Registration();
             $registration->setEvent($event);
             $registration->setUser($user);
@@ -187,8 +187,6 @@ class EventController extends AbstractController
 
             $em->persist($registration);
             $em->flush();
-
-            $this->addFlash('success', 'Votre participation a été enregistrée.');
         }
 
         return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
@@ -197,17 +195,14 @@ class EventController extends AbstractController
     #[Route('/evenement/{id}/cancel-participation', name: 'app_event_cancel_participation')]
     public function cancelParticipation(Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $em, Security $security): Response
     {
-        $user = $security->getUser();
+        $this->denyUnlessLogged();
+        $user = $this->getLoggedUser();
 
         $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
 
-        // Vérifiez si l'utilisateur a déjà confirmé sa participation.
         if ($existingRegistration && $existingRegistration->isHasConfirmed()) {
             $existingRegistration->setHasConfirmed(false);
             $em->flush();
-            $this->addFlash('success', 'Votre participation a été annulée.');
-        } else {
-            $this->addFlash('warning', 'Vous n’êtes pas inscrit à cet événement ou avez déjà annulé.');
         }
 
         return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
@@ -216,7 +211,8 @@ class EventController extends AbstractController
     #[Route('/mon-compte/evenements', name: 'app_account_myevents')]
     public function indexAccountEvent(Security $security, UserRepository $userRepository): Response
     {
-        $user = $security->getUser();
+        $this->denyUnlessLogged();
+        $user = $this->getLoggedUser();
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -235,7 +231,10 @@ class EventController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $event = new Event();
-        $user = $security->getUser();
+
+        $this->denyUnlessLogged();
+        $user = $this->getLoggedUser();
+
         $event->setOrganisator($user);
 
         $form = $this->createForm(EventType::class, $event);
@@ -243,7 +242,6 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Convert the startDate string to DateTime object
             $startDateString = $form->get('startDate')->getData();
             $startDate = \DateTime::createFromFormat('Y-m-d H:i', $startDateString);
             $event->setStartDate($startDate);
@@ -279,7 +277,8 @@ class EventController extends AbstractController
     #[Route('/mon-compte/evenements/{id}/supprimer', name: 'app_myevent_delete')]
     public function deleteEvent(int $id, Security $security, EntityManagerInterface $em): Response
     {
-        $user = $security->getUser();
+        $this->denyUnlessLogged();
+        $user = $this->getLoggedUser();
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -291,22 +290,20 @@ class EventController extends AbstractController
             throw $this->createNotFoundException('L\'événement demandé n\'existe pas.');
         }
 
-        if ($event->getOrganisator() !== $user) {
-            $this->addFlash('error', 'Seul l\'organisateur de l\'événement peut le supprimer.');
+        $isOrganisator = $event->getOrganisator() === $user;
+        $isAdmin = $security->isGranted('ROLE_ADMIN');
+
+        if (!$isOrganisator && !$isAdmin) {
             return $this->redirectToRoute('app_account_myevents');
         }
 
-        // Suppression des inscriptions associées à l'événement
         $registrations = $em->getRepository(Registration::class)->findBy(['event' => $event]);
         foreach ($registrations as $registration) {
             $em->remove($registration);
         }
 
-        // Suppression de l'événement
         $em->remove($event);
         $em->flush();
-
-        $this->addFlash('success', 'Événement supprimé avec succès.');
 
         return $this->redirectToRoute('app_home');
     }
@@ -314,7 +311,8 @@ class EventController extends AbstractController
     #[Route('/mon-compte/evenements/{id}/editer', name: 'app_myevent_edit', methods: ['GET', 'POST'])]
     public function editEvent(int $id, Security $security, EntityManagerInterface $em, Request $request): Response
     {
-        $user = $security->getUser();
+        $this->denyUnlessLogged();
+        $user = $this->getLoggedUser();
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -326,19 +324,20 @@ class EventController extends AbstractController
             throw $this->createNotFoundException('L\'événement demandé n\'existe pas.');
         }
 
-        if ($event->getOrganisator() !== $user) {
-            $this->addFlash('error', 'Seul l\'organisateur de l\'événement peut le modifier.');
+        $isOrganisator = $event->getOrganisator() === $user;
+        $isAdmin = $security->isGranted('ROLE_ADMIN');
+
+        if (!$isOrganisator && !$isAdmin) {
             return $this->redirectToRoute('app_account_myevents');
         }
 
-        // Supposons que vous ayez un EventFormType pour traiter le formulaire
+
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
 
-            $this->addFlash('success', 'Événement modifié avec succès.');
             return $this->redirectToRoute('app_account_myevents');
         }
 

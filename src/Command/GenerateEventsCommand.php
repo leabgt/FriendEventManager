@@ -33,7 +33,7 @@ class GenerateEventsCommand extends Command
     {
         $faker = Factory::create();
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $event = new Event();
 
             $event->setTitle($faker->sentence)
@@ -41,24 +41,27 @@ class GenerateEventsCommand extends Command
                 ->setEndDate($faker->dateTimeBetween('now', '+1 years'))
                 ->setIsPrivate($faker->boolean)
                 ->setIsFinancialParticipation($faker->boolean)
-                ->setFinancialParticipationAmount($faker->randomFloat(2, 5, 200))
                 ->setPlace($faker->address);
 
+            if ($event->isIsFinancialParticipation()) {
+                $event->setFinancialParticipationAmount($faker->randomFloat(2, 5, 200));
+            }
+
             // Assurez-vous d'avoir au moins une catégorie dans votre BD
-            $category = $this->entityManager->getRepository(Category::class)->findOneBy([]);
-            if ($category) {
-                $event->setCategory($category);
+            $categories = $this->entityManager->getRepository(Category::class)->findAll();
+            if ($categories) {
+                $category = $categories[array_rand($categories)];
             } else {
-                // Si aucune catégorie n'est trouvée, vous pouvez créer une nouvelle catégorie ici.
                 $category = new Category();
                 $category->setName($faker->word);
                 $this->entityManager->persist($category);
-                $event->setCategory($category);
             }
+            $event->setCategory($category);
 
             // Assurez-vous d'avoir au moins un organisateur dans votre BD
-            $organisator = $this->entityManager->getRepository(User::class)->findOneBy([]);
-            if ($organisator) {
+            $users = $this->entityManager->getRepository(User::class)->findAll();
+            if ($users) {
+                $organisator = $users[array_rand($users)];
                 $event->setOrganisator($organisator);
             }
 
@@ -67,7 +70,7 @@ class GenerateEventsCommand extends Command
 
         $this->entityManager->flush();
 
-        $output->writeln("50 events have been generated!");
+        $output->writeln("20 events have been generated!");
 
         return Command::SUCCESS;
     }

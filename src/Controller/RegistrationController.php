@@ -57,6 +57,8 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setRoles(['ROLE_USER']);
+
             $birthDateString = $form->get('birthDate')->getData();
             $birthDate = \DateTime::createFromFormat('Y-m-d', $birthDateString);
             $user->setBirthDate($birthDate);

@@ -11,7 +11,7 @@
             {% if not event.isPrivate %}
                 <a href="{{ path('app_event_show', {'id': event.id}) }}">
                         <div class="event-card">
-                            <h3>{{ event.title }}</h3>
+                            <h3 class="event-title">{{ event.title }}</h3>
                             <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
                             {% if event.category.imageUrl %}
                                 <img src="{{ event.category.imageUrl }}">

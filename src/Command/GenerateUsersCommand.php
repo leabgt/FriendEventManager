@@ -4,10 +4,12 @@ namespace App\Command;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Faker\Factory;
+use Stripe\Stripe;
+use Stripe\Customer;
 
 class GenerateUsersCommand extends Command
 {
@@ -15,6 +17,7 @@ class GenerateUsersCommand extends Command
 
     private $entityManager;
 
+    // Suppression de la dépendance à UserPasswordEncoderInterface dans le constructeur
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct();
@@ -31,15 +34,29 @@ class GenerateUsersCommand extends Command
     {
         $faker = Factory::create();
 
+        // Récupérez la clé secrète Stripe depuis $_ENV
+        $stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'];
+
+        // Configurez la clé secrète Stripe
+        Stripe::setApiKey($stripeSecretKey);
+
         for ($i = 0; $i < 50; $i++) {
             $user = new User();
 
+            $password = password_hash('securePassword', PASSWORD_BCRYPT);
+
+            $stripeCustomer = Customer::create([
+                'email' => $user->getEmail(), // Supposons que l'email de l'utilisateur est également son email Stripe.
+                'name' => $user->getFirstName() . ' ' . $user->getLastName(), // Combinez le prénom et le nom.
+            ]);
+
             $user->setEmail($faker->unique()->safeEmail)
                 ->setRoles(['ROLE_USER'])
-                ->setPassword('some_hashed_password') // N'oubliez pas de hasher le mot de passe
+                ->setPassword($password)
                 ->setFirstName($faker->firstName)
                 ->setLastName($faker->lastName)
-                ->setBirthDate($faker->dateTimeBetween('-100 years', '-18 years'));
+                ->setBirthDate($faker->dateTimeBetween('-90 years', '-18 years'))
+                ->setStripeCustomerId($stripeCustomer->id);
 
             $this->entityManager->persist($user);
         }
