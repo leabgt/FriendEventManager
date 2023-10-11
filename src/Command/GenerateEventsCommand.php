@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\Event;
 use App\Entity\Category;
 use App\Entity\User;
+use App\Entity\Registration;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
@@ -63,6 +64,14 @@ class GenerateEventsCommand extends Command
             if ($users) {
                 $organisator = $users[array_rand($users)];
                 $event->setOrganisator($organisator);
+
+                // Création de la Registration ici
+                $registration = new Registration();
+                $registration->setEvent($event);
+                $registration->setUser($organisator); // Utiliser $organisator ici pour assurer que l'organisateur est l'utilisateur enregistré
+                $registration->setHasConfirmed(true);
+                $registration->setRegistrationDate(new \DateTime());
+                $this->entityManager->persist($registration); // Utiliser $this->entityManager au lieu de $entityManager
             }
 
             $this->entityManager->persist($event);

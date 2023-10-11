@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Friend Event Manager - Facilitez l'organisation de vos événements entre amis{% endblock %}
+{% block meta_title %}Friend Event Manager - Facilitez l'organisation de vos événements entre amis{% endblock %}
+{% block meta_description %}Créez et gérez vos événements entre amis facilement et découvrez de nouveaux événements autour de vous avec Friend Event Manager.{% endblock %}
 
 {% block body %}
 
@@ -23,7 +25,7 @@
                     <h3 class="event-title">{{ userevent.title }}</h3>
                     <p> <i>Organisé par <strong>{{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</strong></i></p>
                     {% if userevent.category.imageUrl %}
-                        <img src="{{ userevent.category.imageUrl }}">
+                        <img src="{{ userevent.category.imageUrl }}" alt="{{ userevent.title }}">
                     {% endif %}
                     <div class="event-description">
                         <p><strong> {{userevent.category.name}}</strong></p>
@@ -64,7 +66,7 @@
                             <h3 class="event-title">{{ event.title }}</h3>
                             <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
                             {% if event.category.imageUrl %}
-                                <img src="{{ event.category.imageUrl }}">
+                                <img src="{{ event.category.imageUrl }}" alt="{{ event.title }}"">
                             {% endif %}
                             <div class="event-description">
                                 <p><strong> {{event.category.name}}</strong></p>

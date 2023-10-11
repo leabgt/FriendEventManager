@@ -18,7 +18,6 @@ class HomeController extends AbstractController
 
         $user = $security->getUser();
         $events = $userevents = null;
-        $limit = null;
 
         if ($user) {
             $userevents = $eventRepository->findEventsByUser($user);

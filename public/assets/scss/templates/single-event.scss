@@ -11,13 +11,27 @@
 
     .event-management {
         margin-top: 16px;
-        .fa-trash-alt {
-            color: $red;
-          }
-          .fa-pencil-alt {
-            color: $green; 
-            margin-left: 16px;
-          }
+        display: flex; 
+        flex-direction: column;
+        .event-edition{
+            .fa-trash-alt {
+                color: $red;
+            }
+            .fa-pencil-alt {
+                color: $green; 
+                margin-left: 16px;
+            }
+        }
+        .event-invite {
+            margin-top: 20px;
+            a {
+                text-decoration: none;
+                background-color: $purple;
+                color: $white;
+                padding: 10px 20px;
+                border-radius: 3px;
+            }
+        }
     }
 
     .single-event-img{
@@ -115,6 +129,7 @@
                 background-color: rgba($white, 0.7);  // Ici, 0.5 est le niveau d'opacité
                 padding: 16px;
                 border-radius: 3px;
+                margin-bottom: 5px; 
                 p{
                     margin-top: 0;
                 }

@@ -1,10 +1,14 @@
-<a href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer">
-    <i class="fas fa-trash-alt"></i>
-</a>
-<a href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier">
-    <i class="fas fa-pencil-alt"></i>
-</a>
+<div class="event-edition">
+    <a href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer">
+        <i class="fas fa-trash-alt"></i>
+    </a>
+    <a href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier">
+        <i class="fas fa-pencil-alt"></i>
+    </a>
+</div>
 
-<a href="{{ path('app_event_invite', {'id': event.id}) }}" title="Inviter">
-    Inviter des participants
-</a>
+<div class="event-invite">
+    <a href="{{ path('app_event_invite', {'id': event.id}) }}" title="Inviter" role="button">
+        Inviter des participants
+    </a>
+</div>

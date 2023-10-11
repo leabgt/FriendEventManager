@@ -209,7 +209,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/mon-compte/evenements', name: 'app_account_myevents')]
-    public function indexAccountEvent(Security $security, UserRepository $userRepository): Response
+    public function indexAccountEvent(Security $security, UserRepository $userRepository, EventRepository $eventRepository): Response
     {
         $this->denyUnlessLogged();
         $user = $this->getLoggedUser();
@@ -218,8 +218,8 @@ class EventController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $userRepo = $userRepository->find($this->getUser());
-        $events = $userRepo->getEvents();
+        // $userRepo = $userRepository->find($this->getUser());
+        $events = $eventRepository->findEventsByUser($user);
 
         return $this->render('account_event/index.html.twig', [
             'user' => $user,

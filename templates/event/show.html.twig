@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ event.title }}{% endblock %}
+{% block meta_title %}{{ event.title|e }}{% endblock %}
+{% block meta_description %}Participez à l'événement {{ event.title|e }} - {{ event.category.name|e }} - organisé par {{ event.organisator.firstName|e }} {{ event.organisator.lastName|e }}{% endblock %}
+{% block canonical %}
+    <link rel="canonical" href="{{ url('app_event_show', {'id': event.id}) }}" />
+{% endblock %}
+
 
 {% block body %}
 <div class="custom-container single-event">
