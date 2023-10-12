@@ -19,19 +19,19 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', null, [
-                'label' => 'E-mail', // This is the label
+                'label' => 'E-mail', 
                 'row_attr' => ['class' => 'register-form-row'],
             ])
             ->add('firstName', null, [
-                'label' => 'Prénom', // This is the label
+                'label' => 'Prénom', 
                 'row_attr' => ['class' => 'register-form-row'],
             ])
             ->add('lastName', null, [
-                'label' => 'Nom', // This is the label
+                'label' => 'Nom', 
                 'row_attr' => ['class' => 'register-form-row'],
             ])
             ->add('birthDate', TextType::class, [
-                'label' => 'Date de naissance', // This is the label
+                'label' => 'Date de naissance', 
                 'row_attr' => ['class' => 'register-form-row'],
                 'attr' => ['class' => 'datepicker'],
                 'mapped' => false,

@@ -118,3 +118,25 @@ select{
         }
     }
 }
+
+/// CATEGORY FORM /// 
+
+.category-form {
+    label {
+        margin-right: 20px; 
+    }
+    input{
+        width: 100%; 
+    }
+}
+
+@media (min-width:768px) {
+    .category-form{
+        input{
+            width: 40%; 
+        }
+        .btn-form {
+            width: 50%;
+        }
+    }
+}

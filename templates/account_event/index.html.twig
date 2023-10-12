@@ -12,7 +12,7 @@
                     <h3 class="event-title">{{ event.title }}</h3>
                     <p> <i>Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></i></p>
                     {% if event.category.imageUrl %}
-                        <img src="{{ event.category.imageUrl }} alt="{{ event.title }}"">
+                        <img src="{{ event.category.imageUrl }}" alt="{{ event.title }}"">
                     {% endif %}
                     <div class="event-description">
                         <p><strong> {{event.category.name}}</strong></p>
