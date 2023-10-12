@@ -5,10 +5,10 @@
         <p><stron>{{ event.totalAmountCollected }} €</strong></p>
     </div>
     {% if app.user and event.isIsFinancialParticipation() %}
-    <div class="btn-contribute">
-        <a href="{{ path('app_participation_contribute', { 'eventId': event.id }) }}" class="btn">
-            Contribuer ({{ event.getFinancialParticipationAmount() }}€)
-        </a>
+        <div class="btn-contribute">
+            <a href="{{ path('app_participation_contribute', { 'eventId': event.id }) }}" class="btn">
+                Contribuer ({{ event.getFinancialParticipationAmount() }}€)
+            </a>
         </div>
     {% endif %}
 {% else %}

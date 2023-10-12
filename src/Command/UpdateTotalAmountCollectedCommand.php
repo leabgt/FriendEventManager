@@ -28,7 +28,6 @@ class UpdateTotalAmountCollectedCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Get all registrations where hasParticipated is true
         $registrations = $this->entityManager->getRepository(Registration::class)->findBy(['hasParticipated' => true]);
 
         if (!$registrations) {
@@ -39,16 +38,13 @@ class UpdateTotalAmountCollectedCommand extends Command
         foreach ($registrations as $registration) {
             $event = $registration->getEvent();
 
-            // Get the current totalAmountCollected
             $currentAmount = $event->getTotalAmountCollected() ?? 0;
 
-            // Update totalAmountCollected
             $newAmount = $currentAmount + $event->getFinancialParticipationAmount();
 
             $event->setTotalAmountCollected($newAmount);
         }
 
-        // Flush changes to database
         $this->entityManager->flush();
 
         $output->writeln('Total amount collected updated for all events with participating registrations!');

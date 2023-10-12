@@ -13,12 +13,11 @@
 .toggle-button {
     padding: 8px 15px;
     background-color: $white;
-    // border: 1px solid #ddd;
     border-radius: 3px; 
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin: 5px 5px; /* Ajout d'une petite marge entre les boutons */
+    margin: 5px 5px; 
     font-size: 16px; 
 }
 

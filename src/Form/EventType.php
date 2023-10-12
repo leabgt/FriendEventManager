@@ -27,8 +27,8 @@ class EventType extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Select a category', // Texte par défaut pour le champ (optionnel)
-                'multiple' => false, // Liste déroulante (par défaut)
+                'placeholder' => 'Select a category', 
+                'multiple' => false, 
                 'label' => 'Catégorie',
             ])
             ->add('place', TextType::class, [
@@ -45,7 +45,7 @@ class EventType extends AbstractType
                 'mapped' => false,
             ])
             ->add('isPrivate', HiddenType::class, [
-                'data' => '0',  // valeur par défaut, peut être '0' ou '1'
+                'data' => '0',  
             ])
             ->add('isFinancialParticipation', HiddenType::class, [
                 'data' => '0',
@@ -53,7 +53,7 @@ class EventType extends AbstractType
             ->add('financialParticipationAmount', TextType::class, [
                 'label' => false,
                 'required' => false,
-                'attr' => ['id' => 'event_financialParticipationAmount'], // Ajoutez l'ID
+                'attr' => ['id' => 'event_financialParticipationAmount'], 
                 'label' => 'Montant de la participation',
             ])
             ->add('submit', SubmitType::class, [

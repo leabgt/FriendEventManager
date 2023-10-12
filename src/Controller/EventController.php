@@ -218,7 +218,6 @@ class EventController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // $userRepo = $userRepository->find($this->getUser());
         $events = $eventRepository->findEventsByUser($user);
 
         return $this->render('account_event/index.html.twig', [

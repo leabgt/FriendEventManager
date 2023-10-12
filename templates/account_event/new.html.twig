@@ -3,8 +3,7 @@
 {% block title %}Créer un nouvel événement{% endblock %}
 
 {% block body %}
-<div class="custom-container">
+<div class="custom-container" data-page='eventFormPage'>
     {{ include('account_event/_form.html.twig') }}
 </div>
-{# <a href="{{ path('app_accoun_event_index') }}">back to list</a> #}
 {% endblock %}

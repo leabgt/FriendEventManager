@@ -270,7 +270,6 @@ class Event
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
             if ($comment->getEvent() === $this) {
                 $comment->setEvent(null);
             }

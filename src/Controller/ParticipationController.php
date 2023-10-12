@@ -37,7 +37,6 @@ class ParticipationController extends AbstractController
             return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
         }
 
-        // Check if user already contributed
         if ($registration->isHasParticipated() == true) {
             $this->addFlash('error', 'Vous avez déjà contribué à cette cagnotte.');
             return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);

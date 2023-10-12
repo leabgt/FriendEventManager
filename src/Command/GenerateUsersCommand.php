@@ -34,10 +34,8 @@ class GenerateUsersCommand extends Command
     {
         $faker = Factory::create();
 
-        // Récupérez la clé secrète Stripe depuis $_ENV
         $stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'];
 
-        // Configurez la clé secrète Stripe
         Stripe::setApiKey($stripeSecretKey);
 
         for ($i = 0; $i < 50; $i++) {
@@ -46,8 +44,8 @@ class GenerateUsersCommand extends Command
             $password = password_hash('securePassword', PASSWORD_BCRYPT);
 
             $stripeCustomer = Customer::create([
-                'email' => $user->getEmail(), // Supposons que l'email de l'utilisateur est également son email Stripe.
-                'name' => $user->getFirstName() . ' ' . $user->getLastName(), // Combinez le prénom et le nom.
+                'email' => $user->getEmail(),
+                'name' => $user->getFirstName() . ' ' . $user->getLastName(),
             ]);
 
             $user->setEmail($faker->unique()->safeEmail)

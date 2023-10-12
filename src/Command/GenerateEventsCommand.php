@@ -48,7 +48,6 @@ class GenerateEventsCommand extends Command
                 $event->setFinancialParticipationAmount($faker->randomFloat(2, 5, 200));
             }
 
-            // Assurez-vous d'avoir au moins une catégorie dans votre BD
             $categories = $this->entityManager->getRepository(Category::class)->findAll();
             if ($categories) {
                 $category = $categories[array_rand($categories)];
@@ -59,19 +58,17 @@ class GenerateEventsCommand extends Command
             }
             $event->setCategory($category);
 
-            // Assurez-vous d'avoir au moins un organisateur dans votre BD
             $users = $this->entityManager->getRepository(User::class)->findAll();
             if ($users) {
                 $organisator = $users[array_rand($users)];
                 $event->setOrganisator($organisator);
 
-                // Création de la Registration ici
                 $registration = new Registration();
                 $registration->setEvent($event);
-                $registration->setUser($organisator); // Utiliser $organisator ici pour assurer que l'organisateur est l'utilisateur enregistré
+                $registration->setUser($organisator);
                 $registration->setHasConfirmed(true);
                 $registration->setRegistrationDate(new \DateTime());
-                $this->entityManager->persist($registration); // Utiliser $this->entityManager au lieu de $entityManager
+                $this->entityManager->persist($registration);
             }
 
             $this->entityManager->persist($event);

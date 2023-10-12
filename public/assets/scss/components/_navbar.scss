@@ -98,7 +98,6 @@
   display: none;
 }
 
-/* Styles pour les écrans de taille supérieure (tablette et desktop) */
 @media (min-width: 768px) {
   .navbar {
     .navbar-content {
@@ -107,7 +106,7 @@
       justify-content: space-between;
     }
     .menu-button {
-      display: none; /* Masquer le bouton du menu pour les écrans plus grands */
+      display: none; 
     }
 
     .menu {

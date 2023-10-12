@@ -28,21 +28,17 @@ class UpdateRegistrationParticipationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Get all registrations where hasConfirmed is true
         $registrations = $this->entityManager->getRepository(Registration::class)->findBy(['hasConfirmed' => true]);
 
-        // Check if registrations found
         if (!$registrations) {
             $output->writeln('No confirmed registrations found!');
             return Command::FAILURE;
         }
 
-        // Loop through registrations and set isHasParticipated randomly
         foreach ($registrations as $registration) {
-            $registration->setHasParticipated((bool) random_int(0, 1)); // Random true or false
+            $registration->setHasParticipated((bool) random_int(0, 1)); 
         }
 
-        // Flush changes to database
         $this->entityManager->flush();
 
         $output->writeln('Participation status updated for all confirmed registrations!');

@@ -1,4 +1,4 @@
-import $ from 'jquery'; // Assurez-vous que jQuery est installé
+import $ from 'jquery';
 import 'select2';
 
 

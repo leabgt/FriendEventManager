@@ -36,7 +36,7 @@ class InviteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => null, // No data class, we're just using this for selection
+            'data_class' => null, 
         ]);
     }
 }
