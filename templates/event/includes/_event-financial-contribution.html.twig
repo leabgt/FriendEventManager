@@ -4,12 +4,16 @@
         <h3>Montant total collecté</h3>
         <p><stron>{{ event.totalAmountCollected }} €</strong></p>
     </div>
-    {% if app.user and event.isIsFinancialParticipation() %}
-        <div class="btn-contribute">
-            <a href="{{ path('app_participation_contribute', { 'eventId': event.id }) }}" class="btn">
-                Contribuer ({{ event.getFinancialParticipationAmount() }}€)
-            </a>
-        </div>
+    {% if not hasParticipated %}
+        {% if app.user and event.isIsFinancialParticipation() %}
+            <div class="btn-contribute">
+                <a href="{{ path('app_participation_contribute', { 'eventId': event.id }) }}" class="btn">
+                    Contribuer ({{ event.getFinancialParticipationAmount() }}€)
+                </a>
+            </div>
+        {% endif %}
+    {% else %}
+        <p> Votre contribution à l'événement a été enregistrée</p>
     {% endif %}
 {% else %}
     <h3>Aucune contribution financière</h3>
