@@ -1,37 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}FriendEventManager - Tous les événements{% endblock %}
-{% block meta_title %}FriendEventManager - Tous les événements{% endblock %}
-{% block meta_description %}Découvrez tous les événements et participez !{% endblock %}
+{% block title %}Découvrez et Participez à des Événements avec FriendEventManager{% endblock %}
+{% block meta_title %}Participez à des Événements Uniques - FriendEventManager{% endblock %}
+{% block meta_description %}Explorez une large gamme d'événements publics sur FriendEventManager. Trouvez et rejoignez des événements passionnants adaptés à tous les goûts et intérêts.{% endblock %}
 
 {% block body %}
-<div class="custom-container ">
-    <div class="events">
-        <h1> Participer à de nouveaux événements </h1>
-        <div class="event-cards">
+<main class="custom-container">
+<section class="events">
+            <h2 id="discover-events">Participer à de Nouveaux Événements</h2>
+
+    <div class="event-cards">
         {% for event in events %}
             {% if not event.isPrivate %}
-                <a href="{{ path('app_event_show', {'id': event.id}) }}">
-                        <div class="event-card">
-                            <h3 class="event-title">{{ event.title }}</h3>
-                            <p> Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></p>
-                            {% if event.category.imageUrl %}
-                                <img src="{{ event.category.imageUrl }} alt="{{ event.title }}"">
-                            {% endif %}
-                            <div class="event-description">
-                                <p><strong> {{event.category.name}}</strong></p>
-                                <p><i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
-                                <time> 
-                                    <i class="fas fa-calendar-alt"></i> 
-                                    Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
-                                    au {{ event.endDate|date('d/m/Y à H\\hi') }}
-                                </time>
-                            </div>
+                <article class="event-card">
+                    <a href="{{ path('app_event_show', {'id': event.id}) }}" aria-label="Voir l'événement: {{ event.title }}">
+                        <h3 class="event-title">{{ event.title }}</h3>
+                        <div class="event-organisator"> Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></div>
+                        {% if event.category.imageUrl %}
+                            <img src="{{ event.category.imageUrl }}" alt="Image de l'événement: {{ event.title }}" loading="lazy">
+                        {% endif %}
+                        <div class="event-description">
+                            <p><strong>{{event.category.name}}</strong></p>
+                            <p class="event-place"><i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
+                            <time datetime="{{ event.startDate|date('Y-m-d') }}"> 
+                                <i class="fas fa-calendar-alt"></i> 
+                                Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
+                            </time>
+                            <time datetime="{{ event.endDate|date('Y-m-d') }}"> 
+                                au {{ event.endDate|date('d/m/Y à H\\hi') }}
+                            </time>
                         </div>
                     </a>
+                </article>
             {% endif %}
         {% endfor %}
-        </div>
     </div>
-</div>
+</section>
+</main>
 {% endblock %}

@@ -1,3 +1,6 @@
 {% if event.category.imageUrl %}
-    <img src="{{ event.category.imageUrl }}" alt="{{ event.title }} {{ event.category.name }}"">
+    <figure>
+        <img src="{{ event.category.imageUrl }}" alt="{{ event.title }} - Catégorie : {{ event.category.name }}">
+        <figcaption>{{ event.title }} - Catégorie : {{ event.category.name }}</figcaption>
+    </figure>
 {% endif %}

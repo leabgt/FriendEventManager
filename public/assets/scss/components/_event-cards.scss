@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: repeat($mobile-columns, 1fr); 
     gap: 10px; 
+    margin-top: 40px; 
 
     @media (min-width: 600px) {
       grid-template-columns: repeat($tablet-columns, 1fr);
@@ -32,12 +33,16 @@
         line-height: 1.5em;  
         height: 3em; 
       }
+      .event-organisator {
+        height: 50px;
+        overflow: hidden;
+      }
       p{
         margin: 0;
       }
       img {
         height: 200px;
-        width: 300px; 
+        width: 100%; 
         object-fit: cover;
         margin: 24px 0; 
         border-radius: 3px; 
@@ -48,20 +53,26 @@
         display: -webkit-box;
         -webkit-line-clamp: 5;
         -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
         line-height: 1.5em;  
-        height: 8em; 
-        p{
-          margin-bottom: 5px;
+        .event-place {
+          height: 50px;
+          overflow: hidden;
+        }
+        p {
+          margin-bottom: 8px;
         }
       }
 
       .event-management{
         display: flex;
         margin-left: 8px; 
-        a {
+        button {
           margin-right: 10px;
+          border : none; 
+          background-color: transparent;
+          font-size: 24px;
           .fa-trash-alt {
             color: $red;
           }

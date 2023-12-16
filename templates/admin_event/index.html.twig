@@ -1,65 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin - Événements {% endblock %}
+{% block title %}Admin - Événements{% endblock %}
 
 {% block body %}
 <div class="custom-container">
     <h1>Événements</h1>
 
-    <div class="events-admin">
+    <section class="events-admin">
         <div class="event-cards">
         {% for event in events %}
             {% if not event.isPrivate %}
-                <div class="event-card">
-                    <div class="event-title">{{ event.title }}</div>
-                    <div> Organisateur : {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
-                    <div> Catégorie : {{event.category.name}}</div>
-                    <div> Lieu : {{event.place}}</div>
-                    <div> Date de début : {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} </div>
-                    <div> Date de fin : {{ event.endDate|date('d/m/Y à H\\hi') }} </div>
-                    <div> Evènement privé : {{ event.isPrivate ? 'Oui' : 'Non' }} </div>
-                    {% if event.isFinancialParticipation %}
-                        <div> Participation financière : {{ event.financialParticipationAmount }}</div>
-                    {% else %}
-                        <div> Participation financière : Non </div>
-                    {% endif %}
-                    <a href="{{ path('app_myevent_edit', {'id': event.id}) }}">Modifier</a>
-                    <a href="{{ path('app_myevent_edit', {'id': event.id}) }}">Supprimer</a> 
-                </div>
+                <article class="event-card">
+                    <h2 class="event-title">{{ event.title }}</h2>
+                    <p> Organisateur : {{ event.organisator.firstName }} {{ event.organisator.lastName }}</p>
+                    <p> Catégorie : {{ event.category.name }}</p>
+                    <p> Lieu : {{ event.place }}</p>
+                    <p> Date de début : {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }}</p>
+                    <p> Date de fin : {{ event.endDate|date('d/m/Y à H\\hi') }}</p>
+                    <p> Évènement privé : {{ event.isPrivate ? 'Oui' : 'Non' }}</p>
+                    <p> Participation financière : {{ event.isFinancialParticipation ? event.financialParticipationAmount : 'Non' }}</p>
+                    <a href="{{ path('app_myevent_edit', {'id': event.id}) }}" aria-label="Modifier l'événement {{ event.title }}">Modifier</a>
+                    <a href="{{ path('app_myevent_delete', {'id': event.id}) }}" aria-label="Supprimer l'événement {{ event.title }}">Supprimer</a>
+                </article>
             {% endif %}
         {% endfor %}
         </div>
-    </div>
-
-    {# <table class="table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Début</th>
-                <th>Fin</th>
-                <th>Privé ?</th>
-                <th>Participation financière</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for event in events %}
-            <tr>
-                <td>{{ event.title }}</td>
-                <td>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.isPrivate ? 'Yes' : 'No' }}</td>
-                <td>{{ event.isFinancialParticipation ? 'Yes' : 'No' }}</td>
-                <td>{{ event.financialParticipationAmount }}</td>
-                <td><a href="{{ path('app_event_show', {'id': event.id}) }}">show</a></td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">Aucun événement</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table> #}
+    </section>
 </div>
 
 {% endblock %}

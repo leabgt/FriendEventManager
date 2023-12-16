@@ -1,91 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Friend Event Manager - Facilitez l'organisation de vos événements entre amis{% endblock %}
-{% block meta_title %}Friend Event Manager - Facilitez l'organisation de vos événements entre amis{% endblock %}
-{% block meta_description %}Créez et gérez vos événements entre amis facilement et découvrez de nouveaux événements autour de vous avec Friend Event Manager.{% endblock %}
+{% block title %}Friend Event Manager - Organisation d'événements entre amis{% endblock %}
+{% block meta_title %}Friend Event Manager - Organisation facile d'événements entre amis{% endblock %}
+{% block meta_description %}Rejoignez Friend Event Manager pour créer, gérer et découvrir des événements entre amis. Planifiez des rencontres amusantes et intéressantes près de chez vous.{% endblock %}
 
 {% block body %}
 
-<div class="custom-container home-index">
+<main class="custom-container home-index">
 
-    <h1>CRÉEZ VOTRE ÉVÉNEMENT EN QUELQUES CLICS</h1>
-    
-    <div class="add-new-event-link"><a href="{{ path('app_account_event_new') }}">Créer un événement</a></div>
+    <header>
+        <h1>Créez Votre Événement en Quelques Clics</h1>
+        <div class="add-new-event-link">
+            <button onclick="location.href='{{ path('app_account_event_new') }}'" aria-label="Créer un nouvel événement">Créer un événement</button>
+        </div>
+    </header>
 
     {% if userevents is not empty %}
-    <div class="myevents">
+    <section class="my-events" aria-labelledby="my-events">
         <div class="event-title">
-            <h2>MES EVENEMENTS</h2>
-            <a href="{{ path('app_account_myevents') }}" class="myevents-link"> Voir tous mes événements</a>
+            <h2 id="my-events">Mes Événements</h2>
+            <a href="{{ path('app_account_myevents') }}" aria-label="Parcourir tous mes événements organisés">Voir tous mes événements</a>
         </div>
         <div class="event-cards">
             {% for userevent in userevents %}
-            <div class="event-card">
-                <a href="{{ path('app_event_show', {'id': userevent.id}) }}">
+            <article class="event-card">
+                <a href="{{ path('app_event_show', {'id': userevent.id}) }}" aria-label="Voir l'événement: {{ userevent.title }}">
                     <h3 class="event-title">{{ userevent.title }}</h3>
-                    <p> <i>Organisé par <strong>{{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</strong></i></p>
+                    <p class="event-organisator"> <i>Organisé par <strong>{{userevent.organisator.firstName}} {{userevent.organisator.lastName}}</strong></i></p>
                     {% if userevent.category.imageUrl %}
-                        <img src="{{ userevent.category.imageUrl }}" alt="{{ userevent.title }}">
+                        <img src="{{ userevent.category.imageUrl }}" alt="Image de l'événement: {{ userevent.title }}" loading="lazy">
                     {% endif %}
                     <div class="event-description">
-                        <p><strong> {{userevent.category.name}}</strong></p>
-                        <p> <i class="fas fa-map-marker-alt"></i> {{userevent.place}}</p>
-                        <time> 
+                        <p><strong>{{userevent.category.name}}</strong></p>
+                        <p class="event-place"><i class="fas fa-map-marker-alt"></i> {{userevent.place}}</p>
+                        <time datetime="{{ userevent.startDate|date('Y-m-d') }}"> 
                             <i class="fas fa-calendar-alt"></i> 
                             Du {{ userevent.startDate ? userevent.startDate|date('d/m/Y à H\\hi') : '' }} 
+                        </time>
+                        <time datetime="{{ userevent.endDate|date('Y-m-d') }}"> 
                             au {{ userevent.endDate|date('d/m/Y à H\\hi') }}
                         </time>
                     </div>
                 </a>
                 {% if app.user == userevent.organisator %}
-                    <div class="event-management">
-                        <a href="{{ path('app_myevent_delete', {'id': userevent.id}) }}" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
-                        <a href="{{ path('app_myevent_edit', {'id': userevent.id}) }}" title="Modifier">
-                            <i class="fas fa-pencil-alt"></i>
-                        </a>
-                    </div>
+                <div class="event-management">
+                    <button onclick="location.href='{{ path('app_myevent_delete', {'id': userevent.id}) }}'" title="Supprimer" aria-label="Supprimer l'événement: {{ userevent.title }}">
+                        <i class="fas fa-trash-alt" aria-hidden="true"></i><span class="sr-only">Supprimer</span>
+                    </button>
+                    <button onclick="location.href='{{ path('app_myevent_edit', {'id': userevent.id}) }}'" title="Modifier" aria-label="Modifier l'événement: {{ userevent.title }}">
+                        <i class="fas fa-pencil-alt" aria-hidden="true"></i><span class="sr-only">Modifier</span>
+                    </button>
+                </div>
                 {% endif %}
-            </div>
+            </article>
             {% endfor %}
         </div>
-    </div>
+    </section>
     {% endif %}
 
-    <div class="events">
+    
+
+    <section class="events">
+    <nav aria-labelledby="discover-events">
         <div class="event-title">
-            <h2> Participer à de nouveaux événements </h2>
-            <a href="{{ path('app_event') }}" class="event-link"> Tous les événements</a>
-        <div>
+            <h2 id="discover-events">Participer à de Nouveaux Événements</h2>
+            <a href="{{ path('app_event') }}" aria-label="Découvrir tous les événements">Tous les événements</a>
+        </div>
+    </nav>
         <div class="event-cards">
         {% for event in events %}
             {% if not event.isPrivate %}
-                <a href="{{ path('app_event_show', {'id': event.id}) }}">
-                        <div class="event-card">
-                            <h3 class="event-title">{{ event.title }}</h3>
-                            <div> Organisé par {{event.organisator.firstName}} {{event.organisator.lastName}}</div>
-                            {% if event.category.imageUrl %}
-                                <img src="{{ event.category.imageUrl }}" alt="{{ event.title }}"">
-                            {% endif %}
-                            <div class="event-description">
-                                <p><strong> {{event.category.name}}</strong></p>
-                                <p><i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
-                                <time> 
-                                    <i class="fas fa-calendar-alt"></i> 
-                                    Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
-                                    au {{ event.endDate|date('d/m/Y à H\\hi') }}
-                                </time>
-                            </div>
-                        </div>
-                    </a>
+            <article class="event-card">
+                <a href="{{ path('app_event_show', {'id': event.id}) }}" aria-label="Voir l'événement: {{ event.title }}">
+                    <h3 class="event-title">{{ event.title }}</h3>
+                    <div class="event-organisator"> Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></div>
+                    {% if event.category.imageUrl %}
+                        <img src="{{ event.category.imageUrl }}" alt="Image de l'événement: {{ event.title }}" loading="lazy">
+                    {% endif %}
+                    <div class="event-description">
+                        <p><strong>{{event.category.name}}</strong></p>
+                        <p class="event-place"><i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
+                        <time datetime="{{ event.startDate|date('Y-m-d') }}"> 
+                            <i class="fas fa-calendar-alt"></i> 
+                            Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
+                        </time>
+                        <time datetime="{{ event.endDate|date('Y-m-d') }}"> 
+                            au {{ event.endDate|date('d/m/Y à H\\hi') }}
+                        </time>
+                    </div>
+                </a>
+            </article>
             {% endif %}
         {% endfor %}
         </div>
-    </div>
+    </section>
 
-    <div class="app-description">{% include 'home/_description.html.twig' %}</div>
+    <section class="app-description">
+        {% include 'home/_description.html.twig' %}
+    </section>
 
-</div>
+</main>
 
 {% endblock %}

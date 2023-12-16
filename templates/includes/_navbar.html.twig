@@ -2,15 +2,15 @@
 
 <nav class="navbar">
     <div class="custom-container navbar-content">
-        <div class="menu-button" id="menu-toggle">
+        <button class="menu-button" id="menu-toggle" aria-label="Menu Principal">
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
-        </div>
+        </button>
         <div class="notification-container">
             {% if app.user %}
-                <div id="notification-icon">
-                    <i class="fa fa-bell"></i>
+                <div id="notification-icon" role="button" aria-label="Notifications">
+                    <i class="fa fa-bell" aria-hidden="true"></i>
                     {% if unreadNotifications|length > 0 %}
                         <span class="notification-count">{{ unreadNotifications|length }}</span>
                     {% endif %}
@@ -29,17 +29,17 @@
             {% endif %}
         </div>
         <ul class="menu">
-            <li><a href="{{ path('app_home') }}">Accueil</a></li>
-            <li><a href="{{ path('app_account_event_new') }}">Créer un événement</a></li>
+            <li><a href="{{ path('app_home') }}" aria-label="Accueil">Accueil</a></li>
+            <li><a href="{{ path('app_account_event_new') }}" aria-label="Créer un événement">Créer un événement</a></li>
             {% if app.user %}
-                <li><a href="{{ path('app_account') }}">Mon compte</a></li>
-                <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
+                <li><a href="{{ path('app_account') }}" aria-label="Mon compte">Mon compte</a></li>
+                <li><a href="{{ path('app_logout') }}" aria-label="Me déconnecter">Se déconnecter</a></li>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="{{ path('app_admin') }}">Admin</a></li>
+                    <li><a href="{{ path('app_admin') }}" aria-label="Admin">Admin</a></li>
                 {% endif %}
             {% else %}
-                <li><a href="{{ path('app_login') }}">Se connecter</a></li>
-                <li><a href="{{ path('app_register') }}">Créer un compte</a></li>
+                <li><a href="{{ path('app_login') }}" aria-label="Me connecter à mon compte">Se connecter</a></li>
+                <li><a href="{{ path('app_register') }}" aria-label="Créer un compte">Créer un compte</a></li>
             {% endif %}
         </ul>
     </div>

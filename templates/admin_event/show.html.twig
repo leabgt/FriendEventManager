@@ -1,54 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Event{% endblock %}
+{% block title %}Événement{% endblock %}
 
 {% block body %}
-    <h1>Event</h1>
+    <h1>Événement</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th scope="row">Id</th>
                 <td>{{ event.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
+                <th scope="row">Titre</th>
                 <td>{{ event.title }}</td>
             </tr>
             <tr>
-                <th>MaxContributor</th>
+                <th scope="row">Contributeur Maximal</th>
                 <td>{{ event.maxContributor }}</td>
             </tr>
             <tr>
-                <th>MinContributor</th>
+                <th scope="row">Contributeur Minimal</th>
                 <td>{{ event.minContributor }}</td>
             </tr>
             <tr>
-                <th>StartDate</th>
+                <th scope="row">Date de Début</th>
                 <td>{{ event.startDate ? event.startDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>EndDate</th>
+                <th scope="row">Date de Fin</th>
                 <td>{{ event.endDate ? event.endDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>IsPrivate</th>
-                <td>{{ event.isPrivate ? 'Yes' : 'No' }}</td>
+                <th scope="row">Privé</th>
+                <td>{{ event.isPrivate ? 'Oui' : 'Non' }}</td>
             </tr>
             <tr>
-                <th>IsFinancialParticipation</th>
-                <td>{{ event.isFinancialParticipation ? 'Yes' : 'No' }}</td>
+                <th scope="row">Participation Financière</th>
+                <td>{{ event.isFinancialParticipation ? 'Oui' : 'Non' }}</td>
             </tr>
             <tr>
-                <th>FinancialParticipationAmount</th>
+                <th scope="row">Montant de la Participation Financière</th>
                 <td>{{ event.financialParticipationAmount }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_event_index') }}">back to list</a>
+    <a href="{{ path('app_admin_event_index') }}" aria-label="Retour à la liste des événements">Retour à la liste</a>
 
-    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}">edit</a>
+    <a href="{{ path('app_admin_event_edit', {'id': event.id}) }}" aria-label="Modifier l'événement avec l'ID {{ event.id }}">Modifier</a>
 
     {{ include('admin_event/_delete_form.html.twig') }}
 {% endblock %}

@@ -4,10 +4,18 @@
 
 {% block body %}
 
-<div class="custom-container">
-    <div class="admin-index">
-        <a href="{{ path('app_admin_category_index') }}">Catégories</a>
-        <a href="{{ path('app_admin_event_index') }}">Evènements</a>
-    </div>
-</div>
+<section class="custom-container" aria-labelledby="admin-section-title">
+    <h1 id="admin-section-title">Espace Administrateur</h1>
+    <nav class="admin-index" aria-label="Navigation de l'administrateur">
+        <ul>
+            <li>
+                <a href="{{ path('app_admin_category_index') }}" aria-label="Gérer les catégories">Catégories</a>
+            </li>
+            <li>
+                <a href="{{ path('app_admin_event_index') }}" aria-label="Gérer les évènements">Evènements</a>
+            </li>
+        </ul>
+    </nav>
+</section>
+
 {% endblock %}

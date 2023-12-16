@@ -3,39 +3,41 @@
 {% block title %}Mes événements{% endblock %}
 
 {% block body %}
-<div class="custom-container">
-    <h2>MES ÉVÈNEMENTS</h2>
+<section class="custom-container" aria-labelledby="section-title">
+    <h2 id="section-title">MES ÉVÈNEMENTS</h2>
     <div class="event-cards">
-            {% for event in events %}
-            <div class="event-card">
-                <a href="{{ path('app_event_show', {'id': event.id}) }}">
-                    <h3 class="event-title">{{ event.title }}</h3>
-                    <p> <i>Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></i></p>
-                    {% if event.category.imageUrl %}
-                        <img src="{{ event.category.imageUrl }}" alt="{{ event.title }}"">
-                    {% endif %}
-                    <div class="event-description">
-                        <p><strong> {{event.category.name}}</strong></p>
-                        <p> <i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
-                        <time> 
-                            <i class="fas fa-calendar-alt"></i> 
-                            Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
-                            au {{ event.endDate|date('d/m/Y à H\\hi') }}
-                        </time>
-                    </div>
-                </a>
-                {% if app.user == event.organisator %}
-                    <div class="event-management">
-                        <a href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
-                        <a href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier">
-                            <i class="fas fa-pencil-alt"></i>
-                        </a>
-                    </div>
+        {% for event in events %}
+        <article class="event-card" aria-labelledby="event-title-{{ event.id }}">
+            <a href="{{ path('app_event_show', {'id': event.id}) }}" aria-describedby="event-description-{{ event.id }}">
+                <h3 id="event-title-{{ event.id }}" class="event-title">{{ event.title }}</h3>
+                <p class="event-organisator"> <i>Organisé par <strong>{{event.organisator.firstName}} {{event.organisator.lastName}}</strong></i></p>
+                {% if event.category.imageUrl %}
+                    <img src="{{ event.category.imageUrl }}" alt="Image de la catégorie {{ event.category.name }} pour l'événement {{ event.title }}">
                 {% endif %}
-            </div>
-            {% endfor %}
+                <div id="event-description-{{ event.id }}" class="event-description">
+                    <p><strong> {{event.category.name}}</strong></p>
+                    <p class="event-place"> <i class="fas fa-map-marker-alt"></i> {{event.place}}</p>
+                    <time datetime="{{ event.startDate|date('Y-m-d') }}"> 
+                        <i class="fas fa-calendar-alt"></i> 
+                        Du {{ event.startDate ? event.startDate|date('d/m/Y à H\\hi') : '' }} 
+                    </time>
+                    <time datetime="{{ event.endDate|date('Y-m-d') }}"> 
+                        au {{ event.endDate|date('d/m/Y à H\\hi') }}
+                    </time>
+                </div>
+            </a>
+            {% if app.user == event.organisator %}
+                <div class="event-management">
+                    <button href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer cet événement" aria-label="Supprimer l'événement {{ event.title }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier cet événement" aria-label="Modifier l'événement {{ event.title }}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            {% endif %}
+        </article>
+        {% endfor %}
     </div>
-</div>
+</section>
 {% endblock %}

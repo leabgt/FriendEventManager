@@ -1,16 +1,21 @@
 <h2>Commentaires</h2>
-<div class="comment-form">
-    {{ form_start(comment_form) }}
+<div class="comment-form" role="form">
+    {{ form_start(comment_form, {'attr': {'aria-label': 'Formulaire de commentaire'}}) }}
     {{ form_widget(comment_form) }}
     {{ form_end(comment_form) }}
 </div>
-<div class="event-comments">
-{% for comment in event.comments %}
-    <div class="event-comment-show">
-        <p><strong>{{ comment.getUser().getFirstName() }} {{ comment.getUser().getLastName() }}</strong>, <i>le {{comment.createdAt|date('d/m/Y à H\\hi') }} :</i></p>
-        <p>{{ comment.getComment() }}</p>
+<section aria-labelledby="comments-section">
+    <h3 id="comments-section">Commentaires sur l'événement</h3>
+    <div class="event-comments">
+    {% for comment in event.comments %}
+        <article class="event-comment-show">
+            <header>
+                <p><strong>{{ comment.getUser().getFirstName() }} {{ comment.getUser().getLastName() }}</strong>, <i>le {{comment.createdAt|date('d/m/Y à H\\hi') }} :</i></p>
+            </header>
+            <p>{{ comment.getComment() }}</p>
+        </article>
+    {% else %}
+        <p>Aucun commentaire pour cet événement.</p>
+    {% endfor %}
     </div>
-{% else %}
-    <p>Aucun commentaire pour cet événement.</p>
-{% endfor %}
-</div>
+</section>

@@ -5,9 +5,12 @@
 {% block body %}
 
 <div class="custom-container">
-    <div class="account-index">
-        <a href="{{ path('app_account_event_new') }}">Créer un évènement</a>
-        <a href="{{ path('app_account_myevents') }}">Mes évènements</a>
-    </div>
+    <nav aria-label="Navigation de mon compte">
+        <div class="account-index">
+            <a href="{{ path('app_account_event_new') }}" title="Créer un nouvel évènement">Créer un évènement</a>
+            <a href="{{ path('app_account_myevents') }}" title="Voir mes évènements">Mes évènements</a>
+        </div>
+    </nav>
 </div>
+
 {% endblock %}

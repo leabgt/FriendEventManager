@@ -2,11 +2,15 @@
 {% set showParticipateButton = not event.isIsPrivate and (existingRegistration is null or not existingRegistration.isHasConfirmed) or (existingRegistration and not existingRegistration.isHasConfirmed) %}
 
 {% if showParticipateButton %}
-    <div class="single-event-participate">
-        <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary">Participer</a>
-    </div>
+    {# <div class="single-event-participate" role="button" aria-label="Participer à l'événement"> #}
+        <a href="{{ path('app_event_participate', {'id': event.id}) }}" class="btn btn-primary single-event-participate" aria-label="Participer à l'événement">
+            Participer
+        </a>
+    {# </div> #}
 {% elseif existingRegistration and existingRegistration.isHasConfirmed and app.user != event.organisator %}
-    <div class="single-event-cancel">
-        <a href="{{ path('app_event_cancel_participation', {'id': event.id}) }}" class="btn btn-danger">Annuler la participation</a>
-    </div>
+    {# <div class="single-event-cancel" role="button" aria-label="Annuler votre participation à l'événement"> #}
+        <a href="{{ path('app_event_cancel_participation', {'id': event.id}) }}" class="btn btn-danger single-event-cancel" aria-label="Annuler votre participation à l'événement">
+            Annuler la participation
+        </a>
+    {# </div> #}
 {% endif %}

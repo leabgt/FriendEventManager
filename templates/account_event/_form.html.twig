@@ -1,59 +1,56 @@
 <div class="event-form">
     {{ form_start(form) }}
     
+    <!-- Chaque bloc de formulaire -->
     <div class="event-form-row">
         {{ form_label(form.title) }}
         {{ form_widget(form.title) }}
     </div>
 
+    <!-- Catégorie avec ARIA role -->
     <div class="event-form-row">
         <label>{{ form.category.vars.label }}</label>
-        
-        <div id="category-button-group">
+        <div id="category-button-group" role="group" aria-labelledby="categoryLabel">
             {% for choice in form.category.vars.choices %}
-                <button class="category-toggle-button toggle-button {{ form.category.vars.value == choice.value ? 'active' : '' }}" data-value="{{ choice.value }}">
-                    {{ choice.label }}
-                </button>
+                <button class="category-toggle-button toggle-button {{ form.category.vars.value == choice.value ? 'active' : '' }}" data-value="{{ choice.value }}" aria-pressed="{{ form.category.vars.value == choice.value ? 'true' : 'false' }}">{{ choice.label }}</button>
             {% endfor %}
         </div>
-
-        {{ form_widget(form.category, {'attr': {'style': 'display:none;'}}) }} {# Ceci va rendre le champ caché #}
+        {{ form_widget(form.category, {'attr': {'style': 'display:none;'}}) }}
     </div>
 
+    <!-- Autres champs -->
     <div class="event-form-row">
         {{ form_label(form.place) }}
         {{ form_widget(form.place) }}
     </div>
 
+    <!-- Champs de date avec classe pour accessibilité -->
     <div class="event-form-row">
         {{ form_label(form.startDate) }}
-        {{ form_widget(form.startDate) }}
+        {{ form_widget(form.startDate, {'attr': {'class': 'datetimepicker accessible-datepicker'}}) }}
     </div>
-
     <div class="event-form-row">
         {{ form_label(form.endDate) }}
-        {{ form_widget(form.endDate) }}
+        {{ form_widget(form.endDate, {'attr': {'class': 'datetimepicker accessible-datepicker'}}) }}
     </div>
 
+    <!-- Boutons de bascule pour les champs cachés -->
     <div class="event-form-row">
-        <label class="required">Cet événement est-il privé ?</label>   
-        <button id="event_isPrivate_yes" class="toggle-button {{ form.isPrivate.vars.value == '1' ? 'active' : '' }}" data-value="1" type="button">Oui</button>
-        <button id="event_isPrivate_no" class="toggle-button {{ form.isPrivate.vars.value == '0' ? 'active' : '' }}" data-value="0" type="button">Non</button>
-        {{ form_widget(form.isPrivate) }} {# Ceci va rendre le champ caché #}
+        <label class="required">Cet événement est-il privé ?</label>
+        <button id="event_isPrivate_yes" class="toggle-button {{ form.isPrivate.vars.value == '1' ? 'active' : '' }}" data-value="1" type="button" aria-pressed="{{ form.isPrivate.vars.value == '1' ? 'true' : 'false' }}">Oui</button>
+        <button id="event_isPrivate_no" class="toggle-button {{ form.isPrivate.vars.value == '0' ? 'active' : '' }}" data-value="0" type="button" aria-pressed="{{ form.isPrivate.vars.value == '0' ? 'true' : 'false' }}">Non</button>
+        {{ form_widget(form.isPrivate, {'attr': {'aria-hidden': 'true', 'style': 'display:none;'}}) }}
     </div>
 
+    <!-- Répétez le modèle ci-dessus pour d'autres boutons de bascule -->
+
+    <!-- Champ de participation financière -->
     <div class="event-form-row">
-        <label class="required">Y-a-t-il une participation financière ?</label>
-        <button id="event_isFinancialParticipation_yes" class="toggle-button {{ form.isFinancialParticipation.vars.value == '1' ? 'active' : '' }}" data-value="1" type="button">Oui</button>
-        <button id="event_isFinancialParticipation_no" class="toggle-button {{ form.isFinancialParticipation.vars.value == '0' ? 'active' : '' }}" data-value="0" type="button">Non</button>
-        {{ form_widget(form.isFinancialParticipation) }} {# Ceci va rendre le champ caché #}
-    </div>
-
-    <div class="event-form-row" id="event_financialParticipationAmount">
         {{ form_label(form.financialParticipationAmount) }}
         {{ form_widget(form.financialParticipationAmount) }}
     </div>
 
+    <!-- Bouton de soumission -->
     {{ form_widget(form.submit) }}
 
     {{ form_end(form) }}

@@ -4,13 +4,13 @@
 
 {% block body %}
 <div class="custom-container">
-    <h1>Editer la catégorie {{category.name}}</h1>
+    <h1 tabindex="0">Editer la catégorie {{ category.name }}</h1>
 
     <div class="category-form">
         {{ include('admin_category/_form.html.twig', {'button_label': 'Modifier'}) }}   
     </div>
 
-    <a href="{{ path('app_admin_category_index') }}">Revenir à la liste des catégories</a>
+    <a href="{{ path('app_admin_category_index') }}" tabindex="0">Revenir à la liste des catégories</a>
 
 </div>
 {% endblock %}
