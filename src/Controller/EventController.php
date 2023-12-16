@@ -70,37 +70,37 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/{id}', name: 'app_event_show')]
-public function show(Event $event, RegistrationRepository $registrationRepository, Security $security, Request $request): Response
-{
-    $user = $security->getUser();
-    $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
-    $confirmedParticipants = $registrationRepository->findBy(['event' => $event, 'hasConfirmed' => true]);
-    
-    $comment = new Comment();
-    $commentForm = $this->createForm(CommentType::class, $comment);
-    $commentForm->handleRequest($request);
-    
-    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-        $comment->setEvent($event);
-        $comment->setUser($user);
-        $comment->setCreatedAt(new \DateTimeImmutable());
-        
-        $this->entityManager->persist($comment);
-        $this->entityManager->flush();
-        
-        return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
-    }
+    public function show(Event $event, RegistrationRepository $registrationRepository, Security $security, Request $request): Response
+    {
+        $user = $security->getUser();
+        $existingRegistration = $registrationRepository->findOneBy(['event' => $event, 'user' => $user]);
+        $confirmedParticipants = $registrationRepository->findBy(['event' => $event, 'hasConfirmed' => true]);
 
-    $hasParticipated = $existingRegistration ? $existingRegistration->isHasParticipated() : false;
-    
-    return $this->render('event/show.html.twig', [
-        'event' => $event,
-        'existingRegistration' => $existingRegistration,
-        'participants' => $confirmedParticipants,
-        'comment_form' => $commentForm->createView(),
-        'hasParticipated' => $hasParticipated, // Added parameter
-    ]);
-}
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setEvent($event);
+            $comment->setUser($user);
+            $comment->setCreatedAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_event_show', ['id' => $event->getId()]);
+        }
+
+        $hasParticipated = $existingRegistration ? $existingRegistration->isHasParticipated() : false;
+
+        return $this->render('event/show.html.twig', [
+            'event' => $event,
+            'existingRegistration' => $existingRegistration,
+            'participants' => $confirmedParticipants,
+            'comment_form' => $commentForm->createView(),
+            'hasParticipated' => $hasParticipated, // Added parameter
+        ]);
+    }
 
     #[Route('/evenement/{id}/invite', name: 'app_event_invite')]
     public function invite(Request $request, Event $event, RegistrationRepository $registrationRepository, EntityManagerInterface $entityManager): Response
@@ -302,6 +302,11 @@ public function show(Event $event, RegistrationRepository $registrationRepositor
         $registrations = $em->getRepository(Registration::class)->findBy(['event' => $event]);
         foreach ($registrations as $registration) {
             $em->remove($registration);
+        }
+
+        $comments = $em->getRepository(Comment::class)->findBy(['event' => $event]);
+        foreach ($comments as $comment) {
+            $em->remove($comment);
         }
 
         $em->remove($event);

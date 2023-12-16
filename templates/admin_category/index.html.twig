@@ -6,31 +6,33 @@
     <div class="custom-container admin-category-index">
     <h1>Gestion des catégories des événements</h1>
 
-        <div class="add-category">
-            <a href="{{ path('app_admin_category_new') }}">Ajouter une nouvelle catégorie</a>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nom de la catégorie</th>
-                    <th class="actions-th">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for category in categories %}
-                <tr>
-                    <td>{{ category.name }}</td>
-                    <td class="actions-td">
-                        <a href="{{ path('app_admin_category_delete', {'id': category.id}) }}"><i class="fas fa-trash-alt"></i></a>
-                        <a href="{{ path('app_admin_category_edit', {'id': category.id}) }}"><i class="fas fa-pencil-alt"></i></a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="3">Aucune catégorie</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="add-category">
+        <!-- Utilisez des boutons au lieu de liens pour les actions -->
+        <button onclick="location.href='{{ path('app_admin_category_new') }}'">Ajouter une nouvelle catégorie</button>
     </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nom de la catégorie</th>
+                <th scope="col" class="actions-th">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td class="actions-td">
+                    <!-- Ajoutez des aria-label pour décrire les actions des liens -->
+                    <a href="{{ path('app_admin_category_delete', {'id': category.id}) }}" aria-label="Supprimer {{ category.name }}"><i class="fas fa-trash-alt"></i></a>
+                    <a href="{{ path('app_admin_category_edit', {'id': category.id}) }}" aria-label="Modifier {{ category.name }}"><i class="fas fa-pencil-alt"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Aucune catégorie</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

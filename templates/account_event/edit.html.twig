@@ -3,7 +3,10 @@
 {% block title %}Modifier mon événement{% endblock %}
 
 {% block body %}
-
-    {{ include('account_event/_form.html.twig', {'button_label': 'Update'}) }}
-
+<main class="custom-container">
+    <header>
+        <h1 id="section-title">Modifier mon événement</h1>
+    </header>
+        {{ include('account_event/_form.html.twig', {'button_label': 'Update'}) }}
+</main>
 {% endblock %}

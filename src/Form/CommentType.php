@@ -15,14 +15,14 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('comment', TextareaType::class, [
-                'label' => false,
+                'label' => 'Ajouter un commentaire',
+                'label_attr' => ['class' => 'visually-hidden'],
                 'row_attr' => ['class' => 'comment-content-form'],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Ajouter un commentaire',
                 'attr' => ['class' => 'btn btn-form'],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

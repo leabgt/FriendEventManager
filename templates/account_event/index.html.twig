@@ -32,10 +32,10 @@
             </a>
             {% if app.user == event.organisator %}
                 <div class="event-management">
-                    <button href="{{ path('app_myevent_delete', {'id': event.id}) }}" title="Supprimer cet événement" aria-label="Supprimer l'événement {{ event.title }}">
+                    <button onclick="location.href='{{ path('app_myevent_delete', {'id': event.id}) }}'" title="Supprimer cet événement" aria-label="Supprimer l'événement {{ event.title }}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
-                    <button href="{{ path('app_myevent_edit', {'id': event.id}) }}" title="Modifier cet événement" aria-label="Modifier l'événement {{ event.title }}">
+                    <button onclick="location.href='{{ path('app_myevent_edit', {'id': event.id}) }}'" title="Modifier cet événement" aria-label="Modifier l'événement {{ event.title }}">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
                 </div>

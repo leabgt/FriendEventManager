@@ -14,6 +14,10 @@
         display: flex; 
         flex-direction: column;
         .event-edition{
+            a {
+                font-size: 24px;
+                text-decoration: none; 
+            }
             .fa-trash-alt {
                 color: $red;
             }
