@@ -3,7 +3,10 @@
 {% block title %}Créer un nouvel événement{% endblock %}
 
 {% block body %}
-<div class="custom-container" data-page='eventFormPage'>
+<main class="custom-container" data-page='eventFormPage'>
+    <header>
+        <h1>Créer un nouvel événement</h1>
+    </header>
     {{ include('account_event/_form.html.twig') }}
-</div>
+</main>
 {% endblock %}

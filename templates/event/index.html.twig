@@ -6,9 +6,10 @@
 
 {% block body %}
 <main class="custom-container">
+    <header>
+        <h1 id="discover-events">Participer à de Nouveaux Événements</h1>
+    </header>
 <section class="events">
-            <h2 id="discover-events">Participer à de Nouveaux Événements</h2>
-
     <div class="event-cards">
         {% for event in events %}
             {% if not event.isPrivate %}
