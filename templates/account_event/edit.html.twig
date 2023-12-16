@@ -3,10 +3,13 @@
 {% block title %}Modifier mon événement{% endblock %}
 
 {% block body %}
-<main class="custom-container">
+<div class="custom-container">
     <header>
         <h1 id="section-title">Modifier mon événement</h1>
     </header>
+    <main class="account-event-form" data-page='eventFormPage' aria-label="Formulaire d'édition d'événement">
         {{ include('account_event/_form.html.twig', {'button_label': 'Update'}) }}
-</main>
+    </main>
+
+</diuv>
 {% endblock %}

@@ -5,10 +5,11 @@
 {% block meta_description %}Explorez une large gamme d'événements publics sur FriendEventManager. Trouvez et rejoignez des événements passionnants adaptés à tous les goûts et intérêts.{% endblock %}
 
 {% block body %}
-<main class="custom-container">
+<div class="custom-container">
     <header>
         <h1 id="discover-events">Participer à de Nouveaux Événements</h1>
     </header>
+<main aria-label="Les événements à venir">
 <section class="events">
     <div class="event-cards">
         {% for event in events %}
@@ -38,4 +39,5 @@
     </div>
 </section>
 </main>
+</div>
 {% endblock %}

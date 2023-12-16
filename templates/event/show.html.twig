@@ -9,45 +9,46 @@
 
 
 {% block body %}
-<div class="custom-container single-event" aria-label="Détails de l'événement">
-    <div class="event-title">
+<div class="custom-container single-event">
+    <header class="event-title">
         <h1>{{ event.title }}</h1>
-        <p><i>Organisé par <strong>{{event.organisator.firstName }} {{ event.organisator.lastName}}</strong></i></p>
-    </div>
+        <p><i>Organisé par <strong>{{ event.organisator.firstName }} {{ event.organisator.lastName }}</strong></i></p>
+    </header>
 
-    {% if app.user == event.organisator %}
-        <div class="event-management">
-            {% include 'event/includes/_event-management.html.twig' %}
-        </div>
-    {% endif %}
+    <main aria-label="Détails de l'événement">
+        {% if app.user == event.organisator %}
+            <section class="event-management">
+                {% include 'event/includes/_event-management.html.twig' %}
+            </section>
+        {% endif %}
 
-    <div class="single-event-img">
-        {% include 'event/includes/_event-image.html.twig' %}
-    </div>
+        <section class="single-event-img">
+            {% include 'event/includes/_event-image.html.twig' %}
+        </section>
 
-    <div class="event-participation">
-        {% include 'event/includes/_event-participation.html.twig' %}
-    </div>
+        <section class="event-participation">
+            {% include 'event/includes/_event-participation.html.twig' %}
+        </section>
 
-    <div class="event-description">
-        {% include 'event/includes/_event-description.html.twig' %}
-    </div>
+        <section class="event-description">
+            {% include 'event/includes/_event-description.html.twig' %}
+        </section>
 
-    {% if existingRegistration is not null and existingRegistration.isHasConfirmed %}
-        <div class="event-financial-contribution">
-            {% include 'event/includes/_event-financial-contribution.html.twig' %}
-        </div>
-    {% endif %}
+        {% if existingRegistration is not null and existingRegistration.isHasConfirmed %}
+            <section class="event-financial-contribution">
+                {% include 'event/includes/_event-financial-contribution.html.twig' %}
+            </section>
+        {% endif %}
 
-    <div class="event-participant-list">
-        {% include 'event/includes/_event-participant-list.html.twig' %}
-    </div>
+        <section class="event-participant-list">
+            {% include 'event/includes/_event-participant-list.html.twig' %}
+        </section>
 
-    {% if existingRegistration is not null and existingRegistration.isHasConfirmed %}
-        <div class="event-comment">
-            {% include 'event/includes/_event-comment.html.twig' %}
-        </div>
-    {% endif %}
-
+        {% if existingRegistration is not null and existingRegistration.isHasConfirmed %}
+            <section class="event-comment">
+                {% include 'event/includes/_event-comment.html.twig' %}
+            </section>
+        {% endif %}
+    </main>
 </div>
 {% endblock %}

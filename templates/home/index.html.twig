@@ -6,8 +6,7 @@
 
 {% block body %}
 
-<main class="custom-container home-index">
-
+<div class="custom-container home-index">
     <header>
         <h1>Créez Votre Événement en Quelques Clics</h1>
         <div class="add-new-event-link">
@@ -15,6 +14,7 @@
         </div>
     </header>
 
+    <main aria-label="Détails de tous les événements">
     {% if userevents is not empty %}
     <section class="my-events" aria-labelledby="my-events">
         <div class="event-title">
@@ -100,5 +100,6 @@
     </section>
 
 </main>
+</div>
 
 {% endblock %}

@@ -3,10 +3,12 @@
 {% block title %}Créer un nouvel événement{% endblock %}
 
 {% block body %}
-<main class="custom-container" data-page='eventFormPage'>
-    <header>
+<div class="custom-container">    
+<header>
         <h1>Créer un nouvel événement</h1>
     </header>
+<main class="account-event-form" data-page='eventFormPage' aria-label="Formulaire de création d'événement">
     {{ include('account_event/_form.html.twig') }}
 </main>
+</div>
 {% endblock %}
