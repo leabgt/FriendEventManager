@@ -9,7 +9,7 @@
 <header>
     <h1 id="section-title">MES ÉVÈNEMENTS</h1>
 </header>
-    <section class="events" aria-labelledby="section-title">
+    <section class="event-cards" aria-labelledby="section-title">
         {% for event in events %}
         <article class="event-card" aria-labelledby="event-title-{{ event.id }}">
             <a href="{{ path('app_event_show', {'id': event.id}) }}" aria-describedby="event-description-{{ event.id }}">
